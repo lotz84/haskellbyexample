@@ -1,0 +1,28 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Range</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Range</h1><a href="https://gobyexample.com/range">original</a><pre><code class="language-haskell">import Control.Monad
+import Data.Map (Map)
+import qualified Data.Map as Map
+
+main = do
+    let nums = [2, 3, 4]
+    putStrLn $ &quot;sum: &quot; ++ show (sum nums)
+
+    mapM_ putStrLn [&quot;index: &quot; ++ show i | (i, num) &lt;- zip [0..] nums, num == 3]
+
+    let kvs = Map.fromList [(&quot;a&quot;, &quot;apple&quot;), (&quot;b&quot;, &quot;banana&quot;)]
+    forM_ (Map.toList kvs) $ \(k, v) -&gt; putStrLn $ k ++ &quot; -&gt; &quot; ++ v
+
+    mapM_ print $ zip [0..] &quot;haskell&quot;
+</code></pre>
+<pre><code class="language-bash">$ runhaskell range.hs
+sum: 9
+index: 1
+a -&gt; apple
+b -&gt; banana
+(0,&#39;h&#39;)
+(1,&#39;a&#39;)
+(2,&#39;s&#39;)
+(3,&#39;k&#39;)
+(4,&#39;e&#39;)
+(5,&#39;l&#39;)
+(6,&#39;l&#39;)
+</code></pre><a href="/">back to index</a></div></body></html>

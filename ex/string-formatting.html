@@ -1,0 +1,32 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: String Formatting</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: String Formatting</h1><a href="https://gobyexample.com/string-formatting">original</a><pre><code class="language-haskell">{-# LANGUAGE OverloadedStrings #-}
+import Data.Char (chr)
+import System.IO
+import Formatting
+
+data Point = Point { x :: Int
+                   , y :: Int
+                   } deriving Show
+
+main = do
+    let p = Point 1 2
+
+    fprint (shown%&quot;\n&quot;) p
+    fprint (shown%&quot;\n&quot;) True
+    fprint (int%&quot;\n&quot;) 123
+    fprint (bin%&quot;\n&quot;) 14
+    fprint (char%&quot;\n&quot;) $ chr 33
+    fprint (hex%&quot;\n&quot;) 456
+    fprint (float%&quot;\n&quot;) 78.9
+    fprint ((expt 4)%&quot;\n&quot;) 123400000.0
+    fprint (text%&quot;\n&quot;) &quot;string&quot;
+    fprint (shown%&quot;\n&quot;) &quot;string&quot;
+    fprint (&quot;|&quot;%(left 6 &#39; &#39;)%&quot;|&quot;%(left 6 &#39; &#39;)%&quot;|\n&quot;) (12 :: Int) (345 :: Int)
+    fprint (&quot;|&quot;%(prec 5)%&quot;|&quot;%(prec 5)%&quot;|\n&quot;) (1.2 :: Double) (3.45 :: Double)
+    fprint (&quot;|&quot;%(left 6 &#39; &#39;)%&quot;|&quot;%(left 6 &#39; &#39;)%&quot;|\n&quot;) (&quot;foo&quot; :: String) (&quot;b&quot; :: String)
+    fprint (&quot;|&quot;%(right 6 &#39; &#39;)%&quot;|&quot;%(right 6 &#39; &#39;)%&quot;|\n&quot;) (&quot;foo&quot; :: String) (&quot;b&quot; :: String)
+
+    let s = format (&quot;a &quot;%string) &quot;string&quot;
+    print s
+
+    hPrint stderr $ format (&quot;an &quot;%string) &quot;error&quot;
+</code></pre><a href="/">back to index</a></div></body></html>

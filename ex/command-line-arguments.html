@@ -1,0 +1,18 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Command-Line Arguments</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Command-Line Arguments</h1><a href="https://gobyexample.com/command-line-arguments">original</a><pre><code class="language-haskell">import System.Environment
+
+main = do
+    args &lt;- getArgs
+    let arg = args !! 3
+
+    print args
+    putStrLn arg
+
+    progName &lt;- getProgName
+    putStrLn progName
+</code></pre>
+<pre><code class="language-bash">$ ghc command-line-arguments.hs -o command-line-arguments
+$ ./command-line-arguments a b c d
+[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;]
+d
+command-line-arguments
+</code></pre><a href="/">back to index</a></div></body></html>

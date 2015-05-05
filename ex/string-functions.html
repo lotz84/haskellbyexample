@@ -1,0 +1,46 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: String Functions</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: String Functions</h1><a href="https://gobyexample.com/string-functions">original</a><pre><code class="language-haskell">import Data.List
+import Data.Char
+
+include :: String -&gt; String -&gt; Bool
+include xs ys = or . map (isPrefixOf ys) . tails $ xs
+
+joinWith :: [String] -&gt; String -&gt; String
+joinWith xs sep = concat . init . concat $ [[x, sep] | x &lt;- xs]
+
+split :: String -&gt; Char -&gt; [String]
+split &quot;&quot; _ = []
+split xs c = let (ys, zs) = break (== c) xs
+             in  if null zs then [ys] else ys : split (tail zs) c
+
+main = do
+    putStrLn $ &quot;Contains:  &quot; ++ show (&quot;test&quot; `include` &quot;es&quot;)
+    putStrLn $ &quot;Count:     &quot; ++ show (length . filter (==&#39;t&#39;) $ &quot;test&quot;)
+    putStrLn $ &quot;HasPrefix: &quot; ++ show (isPrefixOf &quot;te&quot; &quot;test&quot;)
+    putStrLn $ &quot;HasSuffix: &quot; ++ show (isSuffixOf &quot;st&quot; &quot;test&quot;)
+    putStrLn $ &quot;Index:     &quot; ++ show (elemIndex &#39;e&#39; &quot;test&quot;)
+    putStrLn $ &quot;Join:      &quot; ++ show ([&quot;a&quot;, &quot;b&quot;] `joinWith` &quot;-&quot;)
+    putStrLn $ &quot;Repeat:    &quot; ++ show (replicate 5 &#39;a&#39;)
+    putStrLn $ &quot;Replace:   &quot; ++ show (map (\x -&gt; if x == &#39;o&#39; then &#39;0&#39; else x) &quot;foo&quot;)
+    putStrLn $ &quot;Split:     &quot; ++ show (split &quot;a-b-c-d-e&quot; &#39;-&#39;)
+    putStrLn $ &quot;ToLower:   &quot; ++ map toLower &quot;TEST&quot;
+    putStrLn $ &quot;ToUpper:   &quot; ++ map toUpper &quot;test&quot;
+    putStrLn &quot;&quot;
+    putStrLn $ &quot;Len: &quot; ++ show (length &quot;hello&quot;)
+    putStrLn $ &quot;Char:&quot; ++ show (&quot;hello&quot; !! 1)
+</code></pre>
+<pre><code class="language-bash">$ runhaskell string-functions.hs
+Contains:  True
+Count:     2
+HasPrefix: True
+HasSuffix: True
+Index:     Just 1
+Join:      &quot;a-b&quot;
+Repeat:    &quot;aaaaa&quot;
+Replace:   &quot;f00&quot;
+Split:     [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;,&quot;e&quot;]
+ToLower:   test
+ToUpper:   TEST
+
+Len: 5
+Char:&#39;e&#39;
+</code></pre><a href="/">back to index</a></div></body></html>

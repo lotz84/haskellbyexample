@@ -1,0 +1,15 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Channel Buffering</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Channel Buffering</h1><a href="https://gobyexample.com/channel-buffering">original</a><pre><code class="language-haskell">import Control.Concurrent
+
+main = do
+    messages &lt;- newChan
+
+    writeChan messages &quot;buffered&quot;
+    writeChan messages &quot;channel&quot;
+
+    putStrLn =&lt;&lt; readChan messages
+    putStrLn =&lt;&lt; readChan messages
+</code></pre>
+<pre><code class="language-bash">$ runhaskell channel-buffering.hs
+buffered
+channel
+</code></pre><a href="/">back to index</a></div></body></html>

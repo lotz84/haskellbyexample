@@ -1,0 +1,24 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: For</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: For</h1><a href="https://gobyexample.com/for">original</a><p><code>forM_ = flip mapM_</code></p>
+<pre><code class="language-haskell">import Control.Monad
+
+main = do
+    forM_ [1..3] $ \i -&gt; do
+        print i
+
+    forM_ [7..9] $ \j -&gt; do
+        print j
+
+    forM_ [1..] $ \_ -&gt; do
+        putStrLn &quot;loop&quot;
+        error &quot;break&quot;
+</code></pre>
+<pre><code class="language-bash">$ runhaskell for.hs
+1
+2
+3
+7
+8
+9
+loop
+for.hs: break
+</code></pre><a href="/">back to index</a></div></body></html>

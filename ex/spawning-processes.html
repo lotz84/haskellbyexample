@@ -1,0 +1,33 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Spawning Processes</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Spawning Processes</h1><a href="https://gobyexample.com/spawning-processes">original</a><pre><code class="language-haskell">import System.IO
+import System.Process
+
+main = do
+    (_, Just hout, _, _) &lt;- createProcess (proc &quot;date&quot; []){ std_out = CreatePipe }
+    dateOut &lt;- hGetContents hout
+    putStrLn &quot;&gt; date&quot;
+    putStrLn dateOut
+
+    (Just hin, Just hout, _, _) &lt;- createProcess (proc &quot;grep&quot; [&quot;hello&quot;]){ std_in = CreatePipe, std_out = CreatePipe }
+    hPutStr hin &quot;hello grep\ngoodbye grep&quot;
+    grepBytes &lt;- hGetContents hout
+    putStrLn &quot;&gt; grep hello&quot;
+    putStrLn grepBytes
+
+    (_, Just hout, _, _) &lt;- createProcess (proc &quot;bash&quot; [&quot;-c&quot;, &quot;ls -a -l -h&quot;]){ std_out = CreatePipe }
+    lsOut &lt;- hGetContents hout
+    putStrLn &quot;&gt; ls -a -l -h&quot;
+    putStrLn lsOut
+</code></pre>
+<pre><code class="language-bash">$ runhaskell spawning-processes.hs
+&gt; date
+2015年 5月 5日 火曜日 22時58分59秒 JST
+
+&gt; grep hello
+hello grep
+
+&gt; ls -a -l -h
+total 8
+drwxr-xr-x   3  staff   102B  5  5 22:58 .
+drwxr-xr-x  63  staff   2.1K  5  5 22:58 ..
+-rw-r--r--   1  staff   639B  5  5 22:58 spawning-processes.hs
+</code></pre><a href="/">back to index</a></div></body></html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: URL Parsing</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: URL Parsing</h1><a href="https://gobyexample.com/url-parsing">original</a><pre><code class="language-haskell">import Network.URI
+
+main = do
+    let s = &quot;postgres://user:pass@host.com:5432/path?k=v#f&quot;
+    case parseURI s of
+        Nothing  -&gt; error &quot;no URI&quot;
+        Just uri -&gt; do
+            putStrLn $ uriScheme uri
+            case uriAuthority uri of
+                Nothing   -&gt; error &quot;no Authority&quot;
+                Just auth -&gt; do
+                    putStrLn $ uriUserInfo auth
+                    putStrLn $ uriRegName auth
+                    putStrLn $ uriPort auth
+            putStrLn $ uriPath uri
+            putStrLn $ uriFragment uri
+            putStrLn $ uriQuery uri
+</code></pre>
+<pre><code class="language-bash">$ runhaskell url-parsing.hs
+postgres:
+user:pass@
+host.com
+:5432
+/path
+#f
+?k=v
+</code></pre><a href="/">back to index</a></div></body></html>

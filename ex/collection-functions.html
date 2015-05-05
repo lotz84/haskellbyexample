@@ -1,0 +1,21 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Collection Functions</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Collection Functions</h1><a href="https://gobyexample.com/collection-functions">original</a><pre><code class="language-haskell">import Data.List
+import Data.Char
+
+main = do
+    let strs = [&quot;peach&quot;, &quot;apple&quot;, &quot;pear&quot;, &quot;plum&quot;]
+
+    print $ lookup &quot;pear&quot; (zip strs [0..])
+    print $ elem &quot;grape&quot; strs
+    print $ any (isPrefixOf &quot;p&quot;) strs
+    print $ all (isPrefixOf &quot;p&quot;) strs
+    print $ filter (elem &#39;e&#39;) strs
+    print $ map (map toUpper) strs
+</code></pre>
+<pre><code class="language-bash">$ runhaskell collection-functions.hs
+Just 2
+False
+True
+False
+[&quot;peach&quot;, &quot;apple&quot;, &quot;pear&quot;]
+[&quot;PEACH&quot;,&quot;APPLE&quot;,&quot;PEAR&quot;,&quot;PLUM&quot;]
+</code></pre><a href="/">back to index</a></div></body></html>

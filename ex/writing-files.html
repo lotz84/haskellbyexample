@@ -1,0 +1,38 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Writing Files</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Writing Files</h1><a href="https://gobyexample.com/writing-files">original</a><pre><code class="language-haskell">import Foreign.Marshal.Array
+import Control.Exception
+import Data.Int
+import System.IO
+
+main = do
+    let d1 = &quot;hello\nhaskell\n&quot;
+    writeFile &quot;/tmp/dat1&quot; d1
+
+    bracket (openBinaryFile &quot;/tmp/dat2&quot; WriteMode)
+            (\handle -&gt; hClose handle)
+            $ \handle -&gt; do
+                let d2 = [115, 111, 109, 101, 10] :: [Int8]
+                p &lt;- newArray d2
+                hPutBuf handle p (length d2)
+                putStrLn $ &quot;wrote &quot; ++ show (length d2) ++ &quot; bytes&quot;
+
+                hPutStr handle &quot;writes\n&quot;
+                putStrLn &quot;wrote 7 bytes&quot;
+
+                hSetBuffering handle (BlockBuffering Nothing) -- default
+                hPutStr handle &quot;buffered\n&quot;
+                putStrLn &quot;wrote 9 bytes&quot;
+                hFlush handle
+</code></pre>
+<pre><code class="language-bash">$ runhaskell writing-files.hs
+wrote 5 bytes
+wrote 7 bytes
+wrote 9 bytes
+
+$ cat /tmp/dat1
+hello
+go
+$ cat /tmp/dat2
+some
+writes
+buffered
+</code></pre><a href="/">back to index</a></div></body></html>

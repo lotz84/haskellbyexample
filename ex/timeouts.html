@@ -1,0 +1,49 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Timeouts</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Timeouts</h1><a href="https://gobyexample.com/timeouts">original</a><pre><code class="language-haskell">{-# LANGUAGE GADTs #-}
+import Control.Concurrent
+
+main = do
+    c1 &lt;- newEmptyMVar
+    forkIO $ do
+        threadDelay (2 * 1000000)
+        putMVar c1 &quot;result 1&quot;
+
+    t1 &lt;- newTimer (1 * 1000000)
+    select [ Case c1 $ \res -&gt; putStrLn res
+           , Case t1 $ \_   -&gt; putStrLn &quot;timeout 1&quot;]
+
+    c2 &lt;- newEmptyMVar
+    forkIO $ do
+        threadDelay (2 * 1000000)
+        putMVar c2 &quot;result 2&quot;
+
+    t2 &lt;- newTimer (3 * 1000000)
+    select [ Case c2 $ \res -&gt; putStrLn res
+           , Case t2 $ \_   -&gt; putStrLn &quot;timeout 2&quot;]
+
+type Timer = MVar ()
+
+newTimer :: Int -&gt; IO Timer
+newTimer delay = do
+    timer &lt;- newEmptyMVar
+    forkIO $ do
+        threadDelay delay
+        putMVar timer ()
+    return timer
+
+data Select a where
+    Default :: IO a -&gt; Select a
+    Case    :: MVar b -&gt; (b -&gt; IO a) -&gt; Select a
+
+select :: [Select a] -&gt; IO a
+select [] = error &quot;select: empty list&quot;
+select ((Default x):_) = x
+select (x@(Case v f):xs)  = do
+    var &lt;- tryTakeMVar v
+    case var of
+        Just b  -&gt; f b
+        Nothing -&gt; select (xs ++ [x])
+</code></pre>
+<pre><code class="language-bash">$ runhaskell timeouts.hs
+timeout 1
+result 2
+</code></pre><a href="/">back to index</a></div></body></html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: SHA1 Hashes</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: SHA1 Hashes</h1><a href="https://gobyexample.com/sha1-hashes">original</a><pre><code class="language-haskell">{-# LANGUAGE OverloadedStrings #-}
+import Numeric (showHex)
+import qualified Data.ByteString as BS
+import qualified Crypto.Hash.SHA1 as SHA1
+
+main = do
+    let s = &quot;sha1 this string&quot;
+    let bs = SHA1.hash s
+
+    print s
+    putStrLn $ concatMap (flip showHex &quot;&quot;) $ BS.unpack bs
+</code></pre>
+<pre><code class="language-bash">$ runhaskell sha1-hashes.hs
+&quot;sha1 this string&quot;
+cf23df227d99a74fbe169e3eba035e633b65d94
+</code></pre><a href="/">back to index</a></div></body></html>

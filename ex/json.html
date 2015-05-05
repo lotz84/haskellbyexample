@@ -1,0 +1,54 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: JSON</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: JSON</h1><a href="https://gobyexample.com/json">original</a><p>To work this example, you need install <a href="https://hackage.haskell.org/package/aeson">aeson</a>.</p>
+<pre><code class="language-bash">$ cabal install aeson
+</code></pre>
+<pre><code class="language-haskell">{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
+import GHC.Generics
+import Data.Aeson
+import Data.HashMap.Strict ((!))
+import Data.Vector ((!?))
+import qualified Data.Map as Map
+import qualified Data.ByteString.Lazy.Char8 as BS
+
+data Response1 = Response1 { page :: Int
+                           , fruits :: [String]
+                           } deriving (Show, Generic)
+instance FromJSON Response1
+instance ToJSON Response1
+
+main = do
+    BS.putStrLn $ encode True
+    BS.putStrLn $ encode (1 :: Int)
+    BS.putStrLn $ encode (2.34 :: Double)
+    BS.putStrLn $ encode (&quot;haskell&quot; :: String)
+    BS.putStrLn $ encode ([&quot;apple&quot;, &quot;peach&quot;, &quot;pear&quot;] :: [String])
+    BS.putStrLn $ encode $ Map.fromList ([(&quot;apple&quot;, 5), (&quot;lettuce&quot;, 7)] :: [(String, Int)])
+    BS.putStrLn $ encode $ Response1 {page = 1, fruits = [&quot;apple&quot;, &quot;peach&quot;, &quot;pear&quot;]}
+
+    let byt = &quot;{\&quot;num\&quot;:6.13,\&quot;strs\&quot;:[\&quot;a\&quot;,\&quot;b\&quot;]}&quot;
+    let dat = decode byt :: Maybe Value
+    print dat
+    let num = (\(Just (Object map)) -&gt; map ! &quot;num&quot;) dat
+    print num
+    let strs = (\(Just (Object map)) -&gt; map ! &quot;strs&quot;) dat
+    let str1 = (\(Array vec) -&gt; vec !? 0) strs
+    print str1
+
+    let str = &quot;{\&quot;page\&quot;: 1, \&quot;fruits\&quot;: [\&quot;apple\&quot;, \&quot;peach\&quot;]}&quot;
+    let Just res = decode str :: Maybe Response1
+    print res
+    putStrLn $ (fruits res) !! 0
+</code></pre>
+<pre><code class="language-bash">$ runhaskell json.hs
+true
+1
+2.34
+&quot;haskell&quot;
+[&quot;apple&quot;,&quot;peach&quot;,&quot;pear&quot;]
+{&quot;lettuce&quot;:7,&quot;apple&quot;:5}
+{&quot;fruits&quot;:[&quot;apple&quot;,&quot;peach&quot;,&quot;pear&quot;],&quot;page&quot;:1}
+Just (Object (fromList [(&quot;num&quot;,Number 6.13),(&quot;strs&quot;,Array (fromList [String &quot;a&quot;,String &quot;b&quot;]))]))
+Number 6.13
+Just (String &quot;a&quot;)
+Response1 {page = 1, fruits = [&quot;apple&quot;,&quot;peach&quot;]}
+apple
+</code></pre><a href="/">back to index</a></div></body></html>

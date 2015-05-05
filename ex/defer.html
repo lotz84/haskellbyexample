@@ -1,0 +1,27 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Defer</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Defer</h1><a href="https://gobyexample.com/defer">original</a><p>Use bracket.</p>
+<pre><code class="language-haskell">import Control.Exception
+import System.IO
+import System.IO.Error
+
+main = bracket (createFile &quot;/tmp/defer.txt&quot;) closeFile writeFile&#39;
+
+createFile :: FilePath -&gt; IO Handle
+createFile path = do
+    putStrLn &quot;creating&quot;
+    openFile path WriteMode `catch` (error . ioeGetErrorString)
+
+writeFile&#39; :: Handle -&gt; IO ()
+writeFile&#39; handle = do
+    putStrLn &quot;writing&quot;
+    hPutStr handle &quot;data&quot;
+
+closeFile :: Handle -&gt; IO ()
+closeFile handle = do
+    putStrLn &quot;closing&quot;
+    hClose handle
+</code></pre>
+<pre><code class="language-bash">$ runhaskell defer.hs
+creating
+writing
+closing
+</code></pre><a href="/">back to index</a></div></body></html>

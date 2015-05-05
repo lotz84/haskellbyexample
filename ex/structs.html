@@ -1,0 +1,26 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Structs</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Structs</h1><a href="https://gobyexample.com/structs">original</a><p>About Records</p>
+<pre><code class="language-haskell">data Person = Person { name :: String
+                     , age :: Int
+                     } deriving Show
+
+main = do
+    print $ Person &quot;Bob&quot; 20
+    print $ Person {name = &quot;Alice&quot;, age = 30}
+    -- print $ Person {name = &quot;Fred&quot;}
+    print $ Person {name = &quot;Ann&quot;, age = 40}
+
+    let s = Person {name = &quot;Sean&quot;, age = 50}
+    putStrLn $ name s
+    print $ age s
+
+    let s&#39; = s {age = 51}
+    print $ age s&#39;
+</code></pre>
+<pre><code class="language-bash">$ runhaskell structs.hs
+Person {name = &quot;Bob&quot;, age = 20}
+Person {name = &quot;Alice&quot;, age = 30}
+Person {name = &quot;Ann&quot;, age = 40}
+Sean
+50
+51
+</code></pre><a href="/">back to index</a></div></body></html>

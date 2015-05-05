@@ -1,0 +1,19 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Atomic Counters</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Atomic Counters</h1><a href="https://gobyexample.com/atomic-counters">original</a><pre><code class="language-haskell">import Control.Monad
+import Control.Concurrent
+import Control.Concurrent.STM
+
+main = do
+    ops &lt;- atomically $ newTVar 0
+    forM_ [0..49] $ \_ -&gt; do
+        forkIO . forever $ do
+            atomically $ do
+                x &lt;- readTVar ops
+                writeTVar ops (x + 1)
+            threadDelay 100
+    threadDelay 1000000
+    opsFinal &lt;- atomically $ readTVar ops
+    putStrLn $ &quot;ops: &quot; ++ show opsFinal
+</code></pre>
+<pre><code class="language-bash">$ runhaskell atomic-counters.hs
+ops: 146555
+</code></pre><a href="/">back to index</a></div></body></html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Epoch</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Epoch</h1><a href="https://gobyexample.com/epoch">original</a><pre><code class="language-haskell">import System.Locale
+import Data.Time
+
+main = do
+    now &lt;- getCurrentTime
+    print now
+    let secs  = read $ formatTime defaultTimeLocale &quot;%s&quot; now :: Integer
+    let picos = read $ formatTime defaultTimeLocale &quot;%s%q&quot; now :: Integer
+    let nanos = div picos 1000
+    let millis = div picos 1000000000
+    print secs
+    print millis
+    print nanos
+    print (parseTime defaultTimeLocale &quot;%s&quot;   (show secs) ::  Maybe UTCTime)
+</code></pre>
+<pre><code class="language-bash">$ runhaskell epoch.hs
+2015-05-05 13:32:26.455623 UTC
+1430832746
+1430832746455
+1430832746455623000
+Just 2015-05-05 13:32:26 UTC
+</code></pre><a href="/">back to index</a></div></body></html>

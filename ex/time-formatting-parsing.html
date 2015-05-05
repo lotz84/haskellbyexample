@@ -1,0 +1,30 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Time Formatting / Parsing</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Time Formatting / Parsing</h1><a href="https://gobyexample.com/time-formatting-parsing">original</a><pre><code class="language-haskell">import Data.Time
+import System.Locale
+
+main = do
+    let rfc3339like = &quot;%FT%T%z&quot;
+
+    t &lt;- getZonedTime
+    putStrLn $ formatTime defaultTimeLocale rfc3339like t
+
+    print $ (parseTime defaultTimeLocale rfc3339like &quot;2012-11-01T22:08:41+00:00&quot; :: Maybe ZonedTime)
+
+    putStrLn $ formatTime defaultTimeLocale &quot;%-l:%M%p&quot; t
+    putStrLn $ formatTime defaultTimeLocale &quot;%a %b %-e %X %Y&quot; t
+    putStrLn $ formatTime defaultTimeLocale &quot;%FT%T.%q%z&quot; t
+
+    let form = &quot;%-l %M %p&quot;
+    print $ (parseTime defaultTimeLocale form &quot;8 41 PM&quot; :: Maybe UTCTime)
+
+    let ansic = &quot;%a %b %-e %X %Y&quot;
+    print $ (parseTime defaultTimeLocale form &quot;8:41PM&quot; :: Maybe UTCTime)
+</code></pre>
+<pre><code class="language-bash">$ runhaskell time-formatting-parsing.hs
+2015-05-05T22:33:20+0900
+Just 2012-11-01 22:08:41 +0000
+10:33PM
+Tue May 5 22:33:20 2015
+2015-05-05T22:33:20.122951000000+0900
+Just 1970-01-01 20:41:00 UTC
+Nothing
+</code></pre><a href="/">back to index</a></div></body></html>

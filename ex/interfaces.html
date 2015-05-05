@@ -1,0 +1,37 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Interfaces</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Interfaces</h1><a href="https://gobyexample.com/interfaces">original</a><p>Type Classes and Class Methods.</p>
+<pre><code class="language-haskell">class Geometry g where
+    area :: g -&gt; Double
+    perim :: g -&gt; Double
+
+data Square = Square Double Double deriving Show
+data Circle = Circle Double deriving Show
+
+instance Geometry Square where
+    area (Square w h)  = w * h
+    perim (Square w h) = 2 * w + 2 * h
+
+instance Geometry Circle where
+    area (Circle r) = pi * r * r
+    perim (Circle r) = 2 * pi * r
+
+measure :: (Geometry a, Show a) =&gt; a -&gt; IO ()
+measure g = do
+    print g
+    print $ area g
+    print $ perim g
+
+main = do
+    let s = Square 3 4
+    let c = Circle 5
+
+    measure s
+    measure c
+</code></pre>
+<pre><code class="language-bash">$ runhaskell interfaces.hs
+Square 3.0 4.0
+12.0
+14.0
+Circle 5.0
+78.53981633974483
+31.41592653589793
+</code></pre><a href="/">back to index</a></div></body></html>

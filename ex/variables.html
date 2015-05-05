@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Variables</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Variables</h1><a href="https://gobyexample.com/variables">original</a><p>see also <a href="https://wiki.haskell.org/Variable">Variable</a></p>
+<pre><code class="language-haskell">main = do
+    let a = &quot;initial&quot;
+    putStrLn a
+
+    let b = 1
+    let c = 2
+    print b &gt;&gt; print c
+
+    let d = True
+    print d
+
+    let e = undefined :: Int
+    print e
+
+    let f = &quot;short&quot;
+    putStrLn f
+</code></pre>
+<pre><code class="language-bash">$ runhaskell variables.hs
+initial
+1
+2
+True
+variables.hs: Prelude.undefined
+</code></pre><a href="/">back to index</a></div></body></html>

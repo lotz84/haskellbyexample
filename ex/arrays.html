@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Arrays</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Arrays</h1><a href="https://gobyexample.com/arrays">original</a><pre><code class="language-haskell">import Data.Array
+
+main = do
+    let a = array (0, 4) [(i, 0) | i &lt;- [0..4]]
+    putStrLn $ &quot;emp: &quot; ++ show a
+
+    let a&#39; = a // [(4,100)]
+    putStrLn $ &quot;set: &quot; ++ show a&#39;
+    putStrLn $ &quot;get: &quot; ++ show (a&#39; ! 4)
+    putStrLn $ &quot;len: &quot; ++ show ((+1) . snd . bounds $ a&#39;)
+
+    let b = array (0, 4) [(i, i+1) | i &lt;- [0..4]]
+    putStrLn $ &quot;dcl: &quot; ++ show b
+
+    let twoD = array ((0,0), (1, 2)) [((i, j), i + j) | i &lt;- [0..1], j &lt;- [0..2]]
+    putStrLn $ &quot;2d: &quot; ++ show twoD
+</code></pre>
+<pre><code class="language-bash">$ runhaskell arrays.hs
+emp: array (0,4) [(0,0),(1,0),(2,0),(3,0),(4,0)]
+set: array (0,4) [(0,0),(1,0),(2,0),(3,0),(4,100)]
+get: 100
+len: 5
+dcl: array (0,4) [(0,1),(1,2),(2,3),(3,4),(4,5)]
+2d: array ((0,0),(1,2)) [((0,0),0),((0,1),1),((0,2),2),((1,0),1),((1,1),2),((1,2),3)]
+</code></pre><a href="/">back to index</a></div></body></html>

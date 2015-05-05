@@ -1,0 +1,30 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Maps</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Maps</h1><a href="https://gobyexample.com/maps">original</a><pre><code class="language-haskell">import Data.Map (Map, (!))
+import qualified Data.Map as Map
+
+main = do
+    let m0 = Map.empty
+    let m1 = Map.insert &quot;k1&quot; 7 m0
+    let m  = Map.insert &quot;k2&quot; 13 m1
+    putStrLn $ &quot;map: &quot; ++ show m
+
+    let v1 = m ! &quot;k1&quot;
+    putStrLn $ &quot;v1: &quot; ++ show v1
+    putStrLn $ &quot;len: &quot; ++ show (Map.size m)
+
+    let m&#39; = Map.delete &quot;k2&quot; m
+    putStrLn $ &quot;map: &quot; ++ show m&#39;
+
+    let prs = Map.lookup &quot;k2&quot; m&#39;
+    putStrLn $ &quot;prs: &quot; ++ show prs
+
+    let n = Map.fromList [(&quot;foo&quot;, 1), (&quot;bar&quot;, 2)]
+    putStrLn $ &quot;map: &quot; ++ show n
+</code></pre>
+<pre><code class="language-bash">$ runhaskell maps.hs
+map: fromList [(&quot;k1&quot;,7),(&quot;k2&quot;,13)]
+v1: 7
+len: 2
+map: fromList [(&quot;k1&quot;,7)]
+prs: Nothing
+map: fromList [(&quot;bar&quot;,2),(&quot;foo&quot;,1)]
+</code></pre><a href="/">back to index</a></div></body></html>

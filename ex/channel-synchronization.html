@@ -1,0 +1,20 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Channel Synchronization</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Channel Synchronization</h1><a href="https://gobyexample.com/channel-synchronization">original</a><pre><code class="language-haskell">import Control.Concurrent
+
+worker :: MVar Bool -&gt; IO ()
+worker done = do
+    putStr &quot;working...&quot;
+    threadDelay 1000000
+    putStrLn &quot;done&quot;
+
+    putMVar done True
+
+main = do
+    done &lt;- newEmptyMVar
+    forkIO $ worker done
+
+    takeMVar done
+    return ()
+</code></pre>
+<pre><code class="language-bash">$ runhaskell channel-synchronization.hs
+working...done
+</code></pre><a href="/">back to index</a></div></body></html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Base64 Encoding</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Base64 Encoding</h1><a href="https://gobyexample.com/base64-encoding">original</a><pre><code class="language-haskell">{-# LANGUAGE OverloadedStrings #-}
+import Data.ByteString.Base64
+
+main = do
+    let dat = &quot;abc123!?$*&amp;()&#39;-=@~&quot;
+    let sEnc = encode dat
+    print sEnc
+
+    let sDec = decode sEnc
+    print sDec
+</code></pre>
+<pre><code class="language-bash">$ runhaskell base64-encoding.hs
+&quot;YWJjMTIzIT8kKiYoKSctPUB+&quot;
+Right &quot;abc123!?$*&amp;()&#39;-=@~&quot;
+</code></pre><a href="/">back to index</a></div></body></html>

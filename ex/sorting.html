@@ -1,0 +1,17 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Sorting</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Sorting</h1><a href="https://gobyexample.com/sorting">original</a><pre><code class="language-haskell">import Data.List
+
+main = do
+    let strs = &quot;cab&quot;
+    putStrLn $ &quot;Strings: &quot; ++ sort strs
+
+    let ints = [7, 2, 4]
+    putStrLn $ &quot;Ints: &quot; ++ show (sort ints)
+
+    let s = ints == sort ints
+    putStrLn $ &quot;Sorted: &quot; ++ show s
+</code></pre>
+<pre><code class="language-bash">runhaskell sorting.hs
+Strings: abc
+Ints: [2,4,7]
+Sorted: False
+</code></pre><a href="/">back to index</a></div></body></html>

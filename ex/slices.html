@@ -1,0 +1,45 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Slices</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Slices</h1><a href="https://gobyexample.com/slices">original</a><p>About Lists</p>
+<pre><code class="language-haskell">main = do
+    let s = [] :: [String]
+    putStrLn $ &quot;emp: &quot; ++ show s
+
+    let s&#39; = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
+    putStrLn $ &quot;set: &quot; ++ show s&#39;
+    putStrLn $ &quot;get: &quot; ++ s&#39; !! 2
+    putStrLn $ &quot;len: &quot; ++ show (length s&#39;)
+
+    let s2 = s&#39; ++ [&quot;d&quot;]
+    let s3 = s2 ++ [&quot;d&quot;, &quot;f&quot;]
+    putStrLn $ &quot;apd: &quot; ++ show s3
+
+    let c = s3
+    putStrLn $ &quot;cpy: &quot; ++ show c
+
+    let l1 = drop 2 . take 5 $ s3
+    putStrLn $ &quot;sl1: &quot; ++ show l1
+
+    let l2 = take 5 s3
+    putStrLn $ &quot;sl2: &quot; ++ show l2
+
+    let l3 = drop 2 s3
+    putStrLn $ &quot;sl3: &quot; ++ show l3
+
+    let t = [&quot;g&quot;, &quot;h&quot;, &quot;i&quot;]
+    putStrLn $ &quot;dcl: &quot; ++ show t
+
+    let twoD = [[i + j | j &lt;- [0..i]] | i &lt;- [0..2]]
+    putStrLn $ &quot;2d: &quot; ++ show twoD
+</code></pre>
+<pre><code class="language-bash">$ runhaskell slices.hs
+emp: []
+set: [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+get: c
+len: 3
+apd: [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;,&quot;d&quot;,&quot;f&quot;]
+cpy: [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;,&quot;d&quot;,&quot;f&quot;]
+sl1: [&quot;c&quot;,&quot;d&quot;,&quot;d&quot;]
+sl2: [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;,&quot;d&quot;]
+sl3: [&quot;c&quot;,&quot;d&quot;,&quot;d&quot;,&quot;f&quot;]
+dcl: [&quot;g&quot;,&quot;h&quot;,&quot;i&quot;]
+2d: [[0],[1,2],[2,3,4]]
+</code></pre><a href="/">back to index</a></div></body></html>

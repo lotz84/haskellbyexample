@@ -1,0 +1,44 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Timers</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Timers</h1><a href="https://gobyexample.com/timers">original</a><pre><code class="language-haskell">import Data.IORef
+import Control.Concurrent
+
+main = do
+    timer1 &lt;- newTimer (2 * 1000000)
+    waitTimer timer1
+    putStrLn &quot;Timer 1 expired&quot;
+
+    timer2 &lt;- newTimer (1 * 1000000)
+    forkIO $ do
+        waitTimer timer2
+        putStrLn &quot;Timer 2 expired&quot;
+    stopTimer timer2
+    putStrLn &quot;Timer 2 stopped&quot;
+
+data State = Start | Stop
+type Timer = (IORef State, MVar ())
+
+newTimer :: Int -&gt; IO Timer
+newTimer n = do
+    state &lt;- newIORef Start
+    timer &lt;- newEmptyMVar
+    forkIO $ do
+        threadDelay n
+        runState &lt;- readIORef state
+        case runState of
+            Start -&gt; putMVar timer ()
+            Stop  -&gt; return ()
+    return (state, timer)
+
+waitTimer :: Timer -&gt; IO ()
+waitTimer (state, timer) = do
+    runState &lt;- readIORef state
+    case runState of
+        Start -&gt; readMVar timer
+        Stop  -&gt; return ()
+
+stopTimer :: Timer -&gt; IO ()
+stopTimer (state, _) = writeIORef state Stop
+</code></pre>
+<pre><code class="language-bash">$ runhaskell timers.hs
+Timer 1 expired
+Timer 2 stopped
+</code></pre><a href="/">back to index</a></div></body></html>

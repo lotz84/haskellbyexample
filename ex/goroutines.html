@@ -1,0 +1,26 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Goroutines</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Goroutines</h1><a href="https://gobyexample.com/goroutines">original</a><p>About forkIO.</p>
+<pre><code class="language-haskell">import Control.Monad
+import Control.Concurrent
+
+f :: String -&gt; IO ()
+f from = forM_ [0..2] (\i -&gt; putStrLn $ from ++ &quot;:&quot; ++ show i)
+
+main = do
+    f &quot;direct&quot;
+    forkIO $ f &quot;forkIO&quot;
+    forkIO $ (\msg -&gt; putStrLn msg) &quot;going&quot;
+
+    getLine
+    putStrLn &quot;done&quot;
+</code></pre>
+<pre><code class="language-bash">$ runhaskell goroutines.hs
+direct:0
+direct:1
+direct:2
+forkIO:0
+forkIOg:o1i
+ngf
+orkIO:2
+&lt;enter&gt;
+done
+</code></pre><a href="/">back to index</a></div></body></html>

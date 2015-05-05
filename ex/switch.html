@@ -1,0 +1,31 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Switch</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Switch</h1><a href="https://gobyexample.com/switch">original</a><pre><code class="language-haskell">import Data.Time
+import Data.Time.Calendar.WeekDate
+
+main = do
+    let i = 2
+    putStr $ &quot;write &quot; ++ show i ++ &quot; as &quot;
+    case i of
+        1 -&gt; putStrLn &quot;one&quot;
+        2 -&gt; putStrLn &quot;two&quot;
+        3 -&gt; putStrLn &quot;three&quot;
+
+    now &lt;- getCurrentTime
+    let (_, _, week) = toWeekDate . utctDay $ now
+    putStrLn $
+        case week of
+            6 -&gt; &quot;it&#39;s the weekend&quot;
+            7 -&gt; &quot;it&#39;s the weekend&quot;
+            _ -&gt; &quot;it&#39;s a weekday&quot;
+
+    localtime &lt;- utcToLocalZonedTime now
+    let hour = todHour . localTimeOfDay . zonedTimeToLocalTime $ localtime
+    case hour of
+        _
+            | hour &lt; 12 -&gt; putStrLn &quot;it&#39;s before noon&quot;
+            | otherwise -&gt; putStrLn &quot;it&#39;s after noon&quot;
+</code></pre>
+<pre><code class="language-bash">$ runhaskell switch.hs
+write 2 as two
+it&#39;s a weekday
+it&#39;s after noon
+</code></pre><a href="/">back to index</a></div></body></html>

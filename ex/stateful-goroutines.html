@@ -1,0 +1,81 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Stateful Goroutines</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Stateful Goroutines</h1><a href="https://gobyexample.com/stateful-goroutines">original</a><pre><code class="language-haskell">{-# LANGUAGE GADTs #-}
+import Control.Monad
+import Control.Concurrent
+import Control.Concurrent.STM
+import System.Random
+import Data.IORef
+import qualified Data.Map as Map
+
+data ReadOp = ReadOp { readKey  :: Int
+                     , readResp :: MVar Int
+                     }
+
+data WriteOp = WriteOp { writeKey  :: Int
+                       , writeVal  :: Int
+                       , writeResp :: MVar Bool
+                       }
+
+main = do
+    ops &lt;- atomically $ newTVar 0 
+
+    reads  &lt;- newEmptyMVar
+    writes &lt;- newEmptyMVar
+
+    forkIO $ do
+        state &lt;- newIORef Map.empty
+        forever $ do
+            select [ Case reads  $ \read  -&gt; do
+                        s &lt;- readIORef state
+                        let val = maybe 0 id $ Map.lookup (readKey read) s
+                        putMVar (readResp read) val                
+                   , Case writes $ \write -&gt; do
+                        modifyIORef state (Map.insert (writeKey write) (writeVal write))
+                        putMVar (writeResp write) True
+                   ]
+
+    forM_ [0..99] $ \_ -&gt; do
+        forkIO . forever $ do
+            key  &lt;- randomRIO (0,4)
+            resp &lt;- newEmptyMVar
+            let read = ReadOp { readKey = key, readResp = resp }
+            putMVar reads read
+            takeMVar resp
+
+            atomically $ do
+                x &lt;- readTVar ops
+                writeTVar ops (x + 1)
+
+    forM_ [0..9] $ \_ -&gt; do
+        forkIO . forever $ do
+            key  &lt;- randomRIO (0,4)
+            val  &lt;- randomRIO (0,99)
+            resp &lt;- newEmptyMVar
+            let write = WriteOp { writeKey = key, writeVal = val, writeResp = resp }
+            putMVar writes write
+            takeMVar resp
+
+            atomically $ do
+                x &lt;- readTVar ops
+                writeTVar ops (x + 1)
+
+    threadDelay 1000000
+
+    opsFinal &lt;- atomically $ readTVar ops
+    putStrLn $ &quot;ops: &quot; ++ show opsFinal
+
+data Select a where
+    Default :: IO a -&gt; Select a
+    Case    :: MVar b -&gt; (b -&gt; IO a) -&gt; Select a
+
+select :: [Select a] -&gt; IO a
+select [] = error &quot;select: empty list&quot;
+select ((Default x):_) = x
+select (x@(Case v f):xs)  = do
+    var &lt;- tryTakeMVar v
+    case var of
+        Just b  -&gt; f b
+        Nothing -&gt; select (xs ++ [x])
+</code></pre>
+<pre><code class="language-bash">$ runhaskell stateful-goroutines.hs
+ops: 11605
+</code></pre><a href="/">back to index</a></div></body></html>

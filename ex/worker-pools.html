@@ -1,0 +1,33 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Worker Pools</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Worker Pools</h1><a href="https://gobyexample.com/worker-pools">original</a><pre><code class="language-haskell">import Control.Concurrent
+import Control.Monad
+
+worker :: Int -&gt; Chan Int -&gt; Chan Int -&gt; MVar () -&gt; IO ()
+worker n jobs results mutex = forever $ do
+    j &lt;- readChan jobs
+    withMVar mutex $ \_ -&gt; do
+        putStrLn $ &quot;worker &quot; ++ show n ++ &quot; processing job &quot; ++ show j
+    threadDelay (1 * 1000000)
+    writeChan results (2 * j)
+
+main = do
+    jobs &lt;- newChan
+    results &lt;- newChan
+    mutex &lt;- newMVar ()
+
+    forM_ [1..3] $ \w -&gt; do
+        forkIO $ worker w jobs results mutex
+
+    forM_ [1..9] $ writeChan jobs
+    forM_ [1..9] $ \_ -&gt; readChan results
+</code></pre>
+<pre><code class="language-bash">$ runhaskell worker-pools.hs
+worker 1 processing job 1
+worker 2 processing job 2
+worker 3 processing job 3
+worker 2 processing job 4
+worker 3 processing job 5
+worker 1 processing job 6
+worker 3 processing job 7
+worker 1 processing job 8
+worker 2 processing job 9
+</code></pre><a href="/">back to index</a></div></body></html>

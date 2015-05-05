@@ -1,0 +1,31 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Random Numbers</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Random Numbers</h1><a href="https://gobyexample.com/random-numbers">original</a><pre><code class="language-haskell">import System.Random
+
+main = do
+    putStr . show =&lt;&lt; randomRIO (0, 100 :: Int)
+    putStr &quot;, &quot;
+    print         =&lt;&lt; randomRIO (0, 100 :: Int)
+
+    print =&lt;&lt; (randomIO :: IO Float)
+
+    f1 &lt;- randomIO :: IO Float
+    putStr $ show (f1 * 5 + 5) ++ &quot;, &quot;
+    f2 &lt;- randomIO :: IO Float
+    print  $ f2 * 5 + 5
+
+    let s1 = mkStdGen 42
+    let (i1, s2) = randomR (0, 100 :: Int) s1
+    let (i2,  _) = randomR (0, 100 :: Int) s2
+    putStrLn $ show i1 ++ &quot;, &quot; ++ show i2
+
+    let s3 = mkStdGen 42
+    let (i3, s4) = randomR (0, 100 :: Int) s3
+    let (i4,  _) = randomR (0, 100 :: Int) s4
+    putStrLn $ show i3 ++ &quot;, &quot; ++ show i4
+</code></pre>
+<pre><code class="language-bash">$ runhaskell random-numbers.hs
+51, 15
+0.2895795
+9.823023, 5.912962
+77, 38
+77, 38
+</code></pre><a href="/">back to index</a></div></body></html>

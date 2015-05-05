@@ -1,0 +1,51 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Reading Files</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Reading Files</h1><a href="https://gobyexample.com/reading-files">original</a><pre><code class="language-haskell">import System.IO
+
+readAtLeast :: Handle -&gt; Integer -&gt; IO String
+readAtLeast handle n
+    | n &lt;= 0 = return &quot;&quot;
+    | otherwise = do
+        eof &lt;- hIsEOF handle
+        if eof
+            then return &quot;&quot;
+            else do
+              c &lt;- hGetChar handle
+              str &lt;- readAtLeast handle (n-1)
+              return (c:str)
+
+main = do
+    dat &lt;- readFile &quot;/tmp/dat&quot;
+    putStrLn dat
+
+    handle &lt;- openFile &quot;/tmp/dat&quot; ReadMode
+
+    b1 &lt;- readAtLeast handle 5 
+    putStrLn $ show (length b1) ++ &quot; bytes: &quot; ++ b1
+
+    hSeek handle AbsoluteSeek 6
+    at2 &lt;- hTell handle
+    b2  &lt;- sequence [hGetChar handle, hGetChar handle]
+    putStrLn $ show (length b2) ++ &quot; bytes @ &quot; ++ show at2 ++  &quot;: &quot; ++ b2
+
+    hSeek handle AbsoluteSeek 6
+    at3 &lt;- hTell handle
+    b3  &lt;- readAtLeast handle 2
+    putStrLn $ show (length b3) ++ &quot; bytes @ &quot; ++ show at2 ++  &quot;: &quot; ++ b3
+
+    hSeek handle AbsoluteSeek 0
+    hSetBuffering handle (BlockBuffering Nothing) -- default
+    b3 &lt;- readAtLeast handle 5
+    putStrLn $ show (length b3) ++ &quot; bytes: &quot; ++ b3
+
+    hClose handle
+</code></pre>
+<pre><code class="language-bash">$ echo &quot;hello&quot; &gt; /tmp/dat
+$ echo &quot;go&quot; &gt;&gt;   /tmp/dat
+$ runhaskell reading-files.hs
+hello
+go
+
+5 bytes: hello
+2 bytes @ 6: go
+2 bytes @ 6: go
+5 bytes: hello
+</code></pre><a href="/">back to index</a></div></body></html>

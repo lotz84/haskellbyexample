@@ -1,0 +1,31 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Channel Directions</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Channel Directions</h1><a href="https://gobyexample.com/channel-directions">original</a><p>see also <a href="http://hackage.haskell.org/package/privileged-concurrency">privileged-concurrency</a></p>
+<pre><code class="language-haskell">import Control.Concurrent
+
+ping :: WriteOnly w =&gt; w String -&gt; String -&gt; IO ()
+ping pings msg = write&#39; pings msg
+
+pong :: (ReadOnly r, WriteOnly w) =&gt; r String -&gt; w String -&gt; IO ()
+pong pings pongs = do
+    msg &lt;- read&#39; pings
+    write&#39; pongs msg
+
+main = do
+    pings &lt;- newEmptyMVar
+    pongs &lt;- newEmptyMVar
+    ping pings &quot;passed message&quot;
+    pong pings pongs
+    putStrLn =&lt;&lt; takeMVar pongs
+
+class ReadOnly f where
+    read&#39; :: f a -&gt; IO a
+instance ReadOnly MVar where
+    read&#39; = takeMVar
+
+class WriteOnly f where
+    write&#39; :: f a -&gt; a -&gt;  IO ()
+instance WriteOnly MVar where
+    write&#39; = putMVar
+</code></pre>
+<pre><code class="language-bash">$ runhaskell channel-directions.hs
+passed message
+</code></pre><a href="/">back to index</a></div></body></html>

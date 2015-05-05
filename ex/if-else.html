@@ -1,0 +1,22 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: If/Else</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: If/Else</h1><a href="https://gobyexample.com/if-else">original</a><pre><code class="language-haskell">main = do
+    if 7 `mod` 2 == 0
+        then putStrLn &quot;7 is even&quot;
+        else putStrLn &quot;7 is odd&quot;
+
+    if 8 `mod` 4 == 0
+        then putStrLn &quot;8 is divisible by 4&quot;
+        else return ()
+
+    let num = 9
+    putStrLn $
+        if num &lt; 0
+            then show num ++ &quot; is negative&quot;
+            else if num &lt; 10
+                then show num ++ &quot; has 1 digit&quot;
+                else show num ++ &quot; has multiple digits&quot;
+</code></pre>
+<pre><code class="language-bash">$ runhaskell if-else.hs
+7 is odd
+8 is divisible by 4
+9 has 1 digit
+</code></pre><a href="/">back to index</a></div></body></html>

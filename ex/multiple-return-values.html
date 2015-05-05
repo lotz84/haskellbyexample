@@ -1,0 +1,16 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Multiple Return Values</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Multiple Return Values</h1><a href="https://gobyexample.com/multiple-return-values">original</a><pre><code class="language-haskell">vals :: () -&gt; (Int, Int)
+vals () = (3, 7)
+
+main = do
+    let (a, b) = vals ()
+    print a
+    print b
+
+    let (_, c) = vals ()
+    print c
+</code></pre>
+<pre><code class="language-bash">$ runhaskell multiple-return-values.hs
+3
+7
+7
+</code></pre><a href="/">back to index</a></div></body></html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html><html><head><title>Haskell by Example: Errors</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/prism.css"><script src="/js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Errors</h1><a href="https://gobyexample.com/errors">original</a><p>Either failure or success.</p>
+<pre><code class="language-haskell">import Control.Monad
+
+f1 :: Int -&gt; Either String Int
+f1 arg = if arg == 42
+             then Left &quot;can&#39;t work with 42&quot;
+             else Right (arg + 3)
+
+data ArgError = ArgError Int String
+
+instance Show ArgError where
+    show (ArgError arg err) = show arg ++ &quot; - &quot; ++ err
+
+f2 :: Int -&gt; Either ArgError Int
+f2 arg = if arg == 42
+             then Left (ArgError arg &quot;can&#39;t work with it&quot;)
+             else Right (arg + 3)
+
+main = do
+    forM_ [7, 42] $ \i -&gt; do
+        case f1 i of
+            Left error -&gt; putStrLn $ &quot;f1 failed: &quot; ++ error
+            Right value -&gt; putStrLn $ &quot;f1 worked: &quot; ++ show value
+
+    forM_ [7, 42] $ \i -&gt; do
+        case f2 i of
+            Left err -&gt; putStrLn $ &quot;f2 failed: &quot; ++ show err
+            Right value -&gt; putStrLn $ &quot;f2 worked: &quot; ++ show value
+    case f2 42 of
+        Left (ArgError arg err) -&gt; do
+            print arg
+            putStrLn err
+        _ -&gt; return ()
+</code></pre>
+<pre><code class="language-bash">$ runhaskell errors.hs
+f1 worked: 10
+f1 failed: can&#39;t work with 42
+f2 worked: 10
+f2 failed: 42 - can&#39;t work with it
+42
+can&#39;t work with it
+</code></pre><a href="/">back to index</a></div></body></html>

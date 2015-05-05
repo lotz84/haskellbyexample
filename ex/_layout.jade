@@ -1,0 +1,13 @@
+doctype
+html
+    head
+        title Haskell by Example: #{title}
+        link(rel="stylesheet" href="/css/main.css")
+        link(rel="stylesheet" href="/css/prism.css")
+        script(src="/js/prism.js")
+    body
+        .example
+            h1 Haskell by Example: #{title}
+            a(href="https://gobyexample.com/#{current.source}") original
+            != yield
+            a(href="/") back to index

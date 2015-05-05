@@ -3,11 +3,11 @@
     :markdown
         [Haskell](https://www.haskell.org/) is an advanced purely-functional programming language.
 
-        *Haskell by Example* is a port of [*Go by Example*](https://gobyexample.com/) to Haskell. Check out the [first example](/ex/hello-world) or browse the full list below.
+        *Haskell by Example* is a port of [*Go by Example*](https://gobyexample.com/) to Haskell. Check out the [first example](ex/hello-world) or browse the full list below.
 
     ul
         for post, slug in public.ex._data
-            li: a(href="/ex/#{slug}") #{post.title}
+            li: a(href="ex/#{slug}") #{post.title}
 
     :markdown
         ```bash

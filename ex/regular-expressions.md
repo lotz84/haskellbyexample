@@ -1,3 +1,9 @@
+To work this example, you need install [regex-compat-tdfa](https://hackage.haskell.org/package/regex-compat-tdfa).
+
+```bash
+$ cabal install regex-compat-tdfa
+```
+
 ```haskell
 import Data.Array
 import Text.Regex

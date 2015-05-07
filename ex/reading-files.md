@@ -19,17 +19,17 @@ main = do
 
     handle <- openFile "/tmp/dat" ReadMode
 
-    b1 <- readAtLeast handle 5 
+    b1 <- readAtLeast handle 5
     putStrLn $ show (length b1) ++ " bytes: " ++ b1
 
     hSeek handle AbsoluteSeek 6
     at2 <- hTell handle
-    b2  <- sequence [hGetChar handle, hGetChar handle]
+    b2  <- sequence . take 7 . repeat $ hGetChar handle
     putStrLn $ show (length b2) ++ " bytes @ " ++ show at2 ++  ": " ++ b2
 
     hSeek handle AbsoluteSeek 6
     at3 <- hTell handle
-    b3  <- readAtLeast handle 2
+    b3  <- readAtLeast handle 7
     putStrLn $ show (length b3) ++ " bytes @ " ++ show at2 ++  ": " ++ b3
 
     hSeek handle AbsoluteSeek 0
@@ -42,13 +42,13 @@ main = do
 
 ```bash
 $ echo "hello" > /tmp/dat
-$ echo "go" >>   /tmp/dat
+$ echo "haskell" >>   /tmp/dat
 $ runhaskell reading-files.hs
 hello
-go
+haskell
 
 5 bytes: hello
-2 bytes @ 6: go
-2 bytes @ 6: go
+7 bytes @ 6: haskell
+7 bytes @ 6: haskell
 5 bytes: hello
 ```

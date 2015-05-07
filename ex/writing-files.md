@@ -33,7 +33,7 @@ wrote 9 bytes
 
 $ cat /tmp/dat1
 hello
-go
+haskell
 $ cat /tmp/dat2
 some
 writes

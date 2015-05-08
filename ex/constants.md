@@ -1,4 +1,4 @@
-Every variables are constants.
+All variables are immutable and constant.
 
 ```haskell
 s :: String

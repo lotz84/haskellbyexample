@@ -6,14 +6,13 @@ main = do
     ops &lt;- atomically $ newTVar 0
     forM_ [0..49] $ \_ -&gt; do
         forkIO . forever $ do
-            atomically $ do
-                x &lt;- readTVar ops
-                writeTVar ops (x + 1)
+            atomically $ modifyTVar ops (+1)
             threadDelay 100
+
     threadDelay 1000000
     opsFinal &lt;- atomically $ readTVar ops
     putStrLn $ &quot;ops: &quot; ++ show opsFinal
 </code></pre>
 <pre><code class="language-bash">$ runhaskell atomic-counters.hs
-ops: 146555
+ops: 148407
 </code></pre><a href="../">back to index</a></div></body></html>

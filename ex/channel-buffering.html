@@ -1,15 +1,17 @@
-<!DOCTYPE html><html><head><title>Haskell by Example: Channel Buffering</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Channel Buffering</h1><a href="https://gobyexample.com/channel-buffering">original</a><pre><code class="language-haskell">import Control.Concurrent
+<!DOCTYPE html><html><head><title>Haskell by Example: Channel Buffering</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Channel Buffering</h1><a href="https://gobyexample.com/channel-buffering">original</a><p>You can treat <a href="http://hackage.haskell.org/package/stm/docs/Control-Concurrent-STM-TQueue.html">TQueue</a> as an unbounded FIFO channel.</p>
+<pre><code class="language-haskell">import Control.Concurrent.STM
 
 main = do
-    messages &lt;- newChan
+    messages &lt;- atomically $ do
+        msg &lt;- newTQueue
+        writeTQueue msg &quot;buffered&quot;
+        writeTQueue msg &quot;queue&quot;
+        return msg
 
-    writeChan messages &quot;buffered&quot;
-    writeChan messages &quot;channel&quot;
-
-    putStrLn =&lt;&lt; readChan messages
-    putStrLn =&lt;&lt; readChan messages
+    putStrLn =&lt;&lt; (atomically . readTQueue) messages
+    putStrLn =&lt;&lt; (atomically . readTQueue) messages
 </code></pre>
 <pre><code class="language-bash">$ runhaskell channel-buffering.hs
 buffered
-channel
+queue
 </code></pre><a href="../">back to index</a></div></body></html>

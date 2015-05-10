@@ -1,17 +1,18 @@
 <!DOCTYPE html><html><head><title>Haskell by Example: Non-Blocking Channel Operations</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Non-Blocking Channel Operations</h1><a href="https://gobyexample.com/non-blocking-channel-operations">original</a><pre><code class="language-haskell">{-# LANGUAGE GADTs #-}
 import Control.Concurrent
+import Control.Concurrent.STM
 
 main = do
-    messages &lt;- newEmptyMVar :: IO (MVar String)
-    signals  &lt;- newEmptyMVar :: IO (MVar Bool)
+    messages &lt;- atomically $ newEmptyTMVar :: IO (TMVar String)
+    signals  &lt;- atomically $ newEmptyTMVar :: IO (TMVar Bool)
 
-    trymsg &lt;- tryTakeMVar messages
+    trymsg &lt;- atomically $ tryReadTMVar messages
     case trymsg of
         Just m -&gt; putStrLn $ &quot;received message &quot; ++ m
         Nothing -&gt; putStrLn &quot;no message received&quot;
 
     let msg = &quot;hi&quot;
-    success &lt;- tryPutMVar messages msg
+    success &lt;- atomically $ tryPutTMVar messages msg
     if success
         then putStrLn $ &quot;sent message &quot; ++ msg
         else putStrLn &quot;no message sent&quot;
@@ -19,17 +20,23 @@ main = do
     select [ Case messages $ \msg -&gt; putStrLn $ &quot;received message &quot; ++ msg
            , Case signals  $ \sig -&gt; putStrLn $ &quot;received signal &quot; ++ show sig
            , Default $ putStrLn &quot;no activiry&quot;
-           ] 
+           ]
+
+class Selectable f where
+    tryRead :: f a -&gt; STM (Maybe a)
+
+instance Selectable TMVar where
+    tryRead = tryReadTMVar
 
 data Select a where
     Default :: IO a -&gt; Select a
-    Case    :: MVar b -&gt; (b -&gt; IO a) -&gt; Select a
+    Case    :: Selectable s =&gt; s b -&gt; (b -&gt; IO a) -&gt; Select a
 
 select :: [Select a] -&gt; IO a
 select [] = error &quot;select: empty list&quot;
 select ((Default x):_) = x
 select (x@(Case v f):xs)  = do
-    var &lt;- tryTakeMVar v
+    var &lt;- atomically $ tryRead v
     case var of
         Just b  -&gt; f b
         Nothing -&gt; select (xs ++ [x])

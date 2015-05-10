@@ -1,12 +1,18 @@
 <!DOCTYPE html><html><head><title>Haskell by Example: Channels</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Channels</h1><a href="https://gobyexample.com/channels">original</a><pre><code class="language-haskell">import Control.Concurrent
+import Control.Concurrent.STM
 
 main = do
-    messages &lt;- newEmptyMVar
+    messages &lt;- newQueue
 
-    forkIO $ putMVar messages &quot;ping&quot;
+    forkIO $ writeQueue messages &quot;ping&quot;
 
-    msg &lt;- takeMVar messages
+    msg &lt;- readQueue messages
     putStrLn msg
+
+    where
+    newQueue   = atomically newTQueue
+    readQueue  = atomically . readTQueue
+    writeQueue = (atomically.) . writeTQueue
 </code></pre>
 <pre><code class="language-bash">$ runhaskell channels.hs
 ping

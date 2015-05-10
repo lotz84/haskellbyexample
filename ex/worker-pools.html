@@ -1,24 +1,25 @@
-<!DOCTYPE html><html><head><title>Haskell by Example: Worker Pools</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Worker Pools</h1><a href="https://gobyexample.com/worker-pools">original</a><pre><code class="language-haskell">import Control.Concurrent
-import Control.Monad
+<!DOCTYPE html><html><head><title>Haskell by Example: Worker Pools</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Worker Pools</h1><a href="https://gobyexample.com/worker-pools">original</a><pre><code class="language-haskell">import Control.Monad
+import Control.Concurrent
+import Control.Concurrent.STM
 
-worker :: Int -&gt; Chan Int -&gt; Chan Int -&gt; MVar () -&gt; IO ()
-worker n jobs results mutex = forever $ do
-    j &lt;- readChan jobs
-    withMVar mutex $ \_ -&gt; do
+worker :: Int -&gt; TQueue Int -&gt; TQueue Int -&gt; MVar () -&gt; IO ()
+worker n jobs results lock = forever $ do
+    j &lt;- atomically $ readTQueue jobs
+    withMVar lock $ \_ -&gt; do
         putStrLn $ &quot;worker &quot; ++ show n ++ &quot; processing job &quot; ++ show j
     threadDelay (1 * 1000000)
-    writeChan results (2 * j)
+    atomically $ writeTQueue results (2 * j)
 
 main = do
-    jobs &lt;- newChan
-    results &lt;- newChan
-    mutex &lt;- newMVar ()
+    jobs &lt;- atomically $ newTQueue
+    results &lt;- atomically $ newTQueue
+    lock &lt;- newMVar ()
 
     forM_ [1..3] $ \w -&gt; do
-        forkIO $ worker w jobs results mutex
+        forkIO $ worker w jobs results lock
 
-    forM_ [1..9] $ writeChan jobs
-    forM_ [1..9] $ \_ -&gt; readChan results
+    forM_ [1..9] $ atomically . writeTQueue jobs
+    forM_ [1..9] $ \_ -&gt; atomically $ readTQueue results
 </code></pre>
 <pre><code class="language-bash">$ runhaskell worker-pools.hs
 worker 1 processing job 1

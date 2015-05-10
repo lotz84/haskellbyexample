@@ -1,44 +1,54 @@
 <!DOCTYPE html><html><head><title>Haskell by Example: Timeouts</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Timeouts</h1><a href="https://gobyexample.com/timeouts">original</a><pre><code class="language-haskell">{-# LANGUAGE GADTs #-}
 import Control.Concurrent
+import Control.Concurrent.STM
 
 main = do
-    c1 &lt;- newEmptyMVar
+    c1 &lt;- atomically $ newTQueue
     forkIO $ do
         threadDelay (2 * 1000000)
-        putMVar c1 &quot;result 1&quot;
+        atomically $ writeTQueue c1 &quot;result 1&quot;
 
     t1 &lt;- newTimer (1 * 1000000)
     select [ Case c1 $ \res -&gt; putStrLn res
            , Case t1 $ \_   -&gt; putStrLn &quot;timeout 1&quot;]
 
-    c2 &lt;- newEmptyMVar
+    c2 &lt;- atomically $ newTQueue
     forkIO $ do
         threadDelay (2 * 1000000)
-        putMVar c2 &quot;result 2&quot;
+        atomically $ writeTQueue c2 &quot;result 2&quot;
 
     t2 &lt;- newTimer (3 * 1000000)
     select [ Case c2 $ \res -&gt; putStrLn res
            , Case t2 $ \_   -&gt; putStrLn &quot;timeout 2&quot;]
 
-type Timer = MVar ()
+type Timer = TMVar ()
 
 newTimer :: Int -&gt; IO Timer
 newTimer delay = do
-    timer &lt;- newEmptyMVar
+    timer &lt;- atomically newEmptyTMVar
     forkIO $ do
         threadDelay delay
-        putMVar timer ()
+        atomically $ putTMVar timer ()
     return timer
+
+class Selectable f where
+    tryRead :: f a -&gt; STM (Maybe a)
+
+instance Selectable TMVar where
+    tryRead = tryReadTMVar
+
+instance Selectable TQueue where
+    tryRead = tryReadTQueue
 
 data Select a where
     Default :: IO a -&gt; Select a
-    Case    :: MVar b -&gt; (b -&gt; IO a) -&gt; Select a
+    Case    :: Selectable s =&gt; s b -&gt; (b -&gt; IO a) -&gt; Select a
 
 select :: [Select a] -&gt; IO a
 select [] = error &quot;select: empty list&quot;
 select ((Default x):_) = x
 select (x@(Case v f):xs)  = do
-    var &lt;- tryTakeMVar v
+    var &lt;- atomically $ tryRead v
     case var of
         Just b  -&gt; f b
         Nothing -&gt; select (xs ++ [x])

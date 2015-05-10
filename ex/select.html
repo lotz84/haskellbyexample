@@ -1,33 +1,41 @@
-<!DOCTYPE html><html><head><title>Haskell by Example: Select</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Select</h1><a href="https://gobyexample.com/select">original</a><pre><code class="language-haskell">{-# LANGUAGE GADTs #-}
+<!DOCTYPE html><html><head><title>Haskell by Example: Select</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Select</h1><a href="https://gobyexample.com/select">original</a><p>Actually, there is no select statement in Haskell. I implement a makeshift &quot;select&quot; in this example. If you have a better idea, please send a Pull Request to <a href="https://github.com/lotz84/haskellbyexample">my repository</a>!</p>
+<pre><code class="language-haskell">{-# LANGUAGE GADTs #-}
 import Control.Monad
 import Control.Concurrent
+import Control.Concurrent.STM
 
 main = do
-    c1 &lt;- newEmptyMVar
-    c2 &lt;- newEmptyMVar
+    c1 &lt;- atomically newTQueue
+    c2 &lt;- atomically newTQueue
 
     forkIO $ do
         threadDelay (1 * 1000000)
-        putMVar c1 &quot;one&quot;
+        atomically $ writeTQueue c1 &quot;one&quot;
 
     forkIO $ do
         threadDelay (2 * 1000000)
-        putMVar c2 &quot;two&quot;
+        atomically $ writeTQueue c2 &quot;two&quot;
 
     forM_ [0..1] $ \i -&gt;
         select [ Case c1 $ \msg1 -&gt; putStrLn $ &quot;received &quot; ++ msg1
                , Case c2 $ \msg2 -&gt; putStrLn $ &quot;received &quot; ++ msg2
                ]
 
+class Selectable f where
+    tryRead :: f a -&gt; STM (Maybe a)
+
+instance Selectable TQueue where
+    tryRead = tryReadTQueue
+
 data Select a where
     Default :: IO a -&gt; Select a
-    Case    :: MVar b -&gt; (b -&gt; IO a) -&gt; Select a
+    Case    :: Selectable s =&gt; s b -&gt; (b -&gt; IO a) -&gt; Select a
 
 select :: [Select a] -&gt; IO a
 select [] = error &quot;select: empty list&quot;
 select ((Default x):_) = x
 select (x@(Case v f):xs)  = do
-    var &lt;- tryTakeMVar v
+    var &lt;- atomically $ tryRead v
     case var of
         Just b  -&gt; f b
         Nothing -&gt; select (xs ++ [x])
@@ -36,5 +44,5 @@ select (x@(Case v f):xs)  = do
 received one
 received two
 
-real    0m2.266s
+real    0m2.267s
 </code></pre><a href="../">back to index</a></div></body></html>

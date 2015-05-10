@@ -1,5 +1,5 @@
-<!DOCTYPE html><html><head><title>Haskell by Example: Timers</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Timers</h1><a href="https://gobyexample.com/timers">original</a><pre><code class="language-haskell">import Data.IORef
-import Control.Concurrent
+<!DOCTYPE html><html><head><title>Haskell by Example: Timers</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Timers</h1><a href="https://gobyexample.com/timers">original</a><pre><code class="language-haskell">import Control.Concurrent
+import Control.Concurrent.STM
 
 main = do
     timer1 &lt;- newTimer (2 * 1000000)
@@ -14,29 +14,26 @@ main = do
     putStrLn &quot;Timer 2 stopped&quot;
 
 data State = Start | Stop
-type Timer = (IORef State, MVar ())
+type Timer = (TVar State, TMVar ())
+
+waitTimer :: Timer -&gt; IO ()
+waitTimer (_, timer) = atomically $ readTMVar timer
+
+stopTimer :: Timer -&gt; IO ()
+stopTimer (state, _) = atomically $ writeTVar state Stop
 
 newTimer :: Int -&gt; IO Timer
 newTimer n = do
-    state &lt;- newIORef Start
-    timer &lt;- newEmptyMVar
+    state &lt;- atomically $ newTVar Start
+    timer &lt;- atomically $ newEmptyTMVar
     forkIO $ do
         threadDelay n
-        runState &lt;- readIORef state
-        case runState of
-            Start -&gt; putMVar timer ()
-            Stop  -&gt; return ()
+        atomically $ do
+            runState &lt;- readTVar state
+            case runState of
+                Start -&gt; putTMVar timer ()
+                Stop  -&gt; return ()
     return (state, timer)
-
-waitTimer :: Timer -&gt; IO ()
-waitTimer (state, timer) = do
-    runState &lt;- readIORef state
-    case runState of
-        Start -&gt; readMVar timer
-        Stop  -&gt; return ()
-
-stopTimer :: Timer -&gt; IO ()
-stopTimer (state, _) = writeIORef state Stop
 </code></pre>
 <pre><code class="language-bash">$ runhaskell timers.hs
 Timer 1 expired

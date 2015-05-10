@@ -1,4 +1,6 @@
-About forkIO.
+Actually there is no goroutine in Haskell.  
+Instead, This example uses forkIO.  
+It is a common way to use concurrency in Haskell.
 
 ```haskell
 import Control.Monad

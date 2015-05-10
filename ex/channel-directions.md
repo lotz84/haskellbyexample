@@ -1,7 +1,7 @@
 see also [privileged-concurrency](http://hackage.haskell.org/package/privileged-concurrency)
 
 ```haskell
-import Control.Concurrent
+import Control.Concurrent.STM
 
 ping :: WriteOnly w => w String -> String -> IO ()
 ping pings msg = write' pings msg
@@ -12,21 +12,21 @@ pong pings pongs = do
     write' pongs msg
 
 main = do
-    pings <- newEmptyMVar
-    pongs <- newEmptyMVar
+    pings <- atomically newTQueue
+    pongs <- atomically newTQueue
     ping pings "passed message"
     pong pings pongs
-    putStrLn =<< takeMVar pongs
+    putStrLn =<< read' pongs
 
 class ReadOnly f where
     read' :: f a -> IO a
-instance ReadOnly MVar where
-    read' = takeMVar
+instance ReadOnly TQueue where
+    read' = atomically . readTQueue
 
 class WriteOnly f where
     write' :: f a -> a ->  IO ()
-instance WriteOnly MVar where
-    write' = putMVar
+instance WriteOnly TQueue where
+    write' = (atomically.) . writeTQueue
 ```
 
 ```bash

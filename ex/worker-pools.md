@@ -1,25 +1,26 @@
 ```haskell
-import Control.Concurrent
 import Control.Monad
+import Control.Concurrent
+import Control.Concurrent.STM
 
-worker :: Int -> Chan Int -> Chan Int -> MVar () -> IO ()
-worker n jobs results mutex = forever $ do
-    j <- readChan jobs
-    withMVar mutex $ \_ -> do
+worker :: Int -> TQueue Int -> TQueue Int -> MVar () -> IO ()
+worker n jobs results lock = forever $ do
+    j <- atomically $ readTQueue jobs
+    withMVar lock $ \_ -> do
         putStrLn $ "worker " ++ show n ++ " processing job " ++ show j
     threadDelay (1 * 1000000)
-    writeChan results (2 * j)
+    atomically $ writeTQueue results (2 * j)
 
 main = do
-    jobs <- newChan
-    results <- newChan
-    mutex <- newMVar ()
+    jobs <- atomically $ newTQueue
+    results <- atomically $ newTQueue
+    lock <- newMVar ()
 
     forM_ [1..3] $ \w -> do
-        forkIO $ worker w jobs results mutex
+        forkIO $ worker w jobs results lock
 
-    forM_ [1..9] $ writeChan jobs
-    forM_ [1..9] $ \_ -> readChan results
+    forM_ [1..9] $ atomically . writeTQueue jobs
+    forM_ [1..9] $ \_ -> atomically $ readTQueue results
 ```
 
 ```bash

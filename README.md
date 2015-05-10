@@ -8,6 +8,9 @@ $ harp server
 
 <http://localhost:9000/>
 
+###Contribution
+Feel free to send a PR or create a new issue.
+
 ###License
 
 This work is copyright Tatsuya Hirose and licensed under a

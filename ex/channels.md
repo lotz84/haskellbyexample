@@ -1,13 +1,19 @@
 ```haskell
 import Control.Concurrent
+import Control.Concurrent.STM
 
 main = do
-    messages <- newEmptyMVar
+    messages <- newQueue
 
-    forkIO $ putMVar messages "ping"
+    forkIO $ writeQueue messages "ping"
 
-    msg <- takeMVar messages
+    msg <- readQueue messages
     putStrLn msg
+
+    where
+    newQueue   = atomically newTQueue
+    readQueue  = atomically . readTQueue
+    writeQueue = (atomically.) . writeTQueue
 ```
 
 ```bash

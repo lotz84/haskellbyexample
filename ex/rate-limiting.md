@@ -1,48 +1,73 @@
 ```haskell
 import Data.Time
-import Control.Concurrent
 import Control.Monad
+import Control.Concurrent
+import Control.Concurrent.STM
 
 main = do
-    requests <- newChan
-    mapM_ (writeChan requests) [1..5]
+    requests <- atomically $ do
+        req <- newTQueue
+        mapM_ (writeTQueue req) [1..5]
+        return req
 
-    limitter <- newChan
+    limitter <- atomically $ newEmptyTMVar
     forkIO . forever $ do
-        writeChan limitter ()
+        atomically $ putTMVar limitter ()
         threadDelay (200 * 1000)
 
-    forM_ [1..5] $ \req -> do
-        readChan limitter
+    let loop1 = do
+        req <- atomically $ do
+            r <- readTQueue requests
+            readTMVar limitter
+            return r
         now <- getCurrentTime
         putStrLn $ "request " ++ show req ++ " " ++ show now
+        isEmpty <- atomically $ isEmptyTQueue requests
+        if isEmpty
+            then return ()
+            else loop1
+    loop1
 
-    burstyLimitter <- newChan
     now <- getCurrentTime
-    forM_ [0..2] $ \_ -> do
-        writeChan burstyLimitter now
+    burstyLimitter <- atomically $ do
+        limitter <- newTBQueue 3
+        forM_ [0..2] $ \_ -> writeTBQueue limitter now
+        return limitter
 
     forkIO . forever $ do
         now <- getCurrentTime
-        writeChan burstyLimitter now
+        atomically $ writeTBQueue burstyLimitter now
         threadDelay (200 * 1000)
 
-    forM_ [1..5] $ \req -> do
-        readChan burstyLimitter
+    burstyRequests <- atomically $ do
+        req <- newTQueue
+        mapM_ (writeTQueue req) [1..5]
+        return req
+
+    let loop2 = do
+        req <- atomically $ do
+            r <- readTQueue burstyRequests
+            readTBQueue burstyLimitter
+            return r
         now <- getCurrentTime
         putStrLn $ "request " ++ show req ++ " " ++ show now
+        isEmpty <- atomically $ isEmptyTQueue burstyRequests
+        if isEmpty
+            then return ()
+            else loop2
+    loop2
 ```
 
 ```bash
 $ runhaskell rate-limiting.hs
-request 1 2015-05-05 12:44:43.840436 UTC
-request 2 2015-05-05 12:44:44.04126 UTC
-request 3 2015-05-05 12:44:44.246552 UTC
-request 4 2015-05-05 12:44:44.451247 UTC
-request 5 2015-05-05 12:44:44.654298 UTC
-request 1 2015-05-05 12:44:44.654908 UTC
-request 2 2015-05-05 12:44:44.655353 UTC
-request 3 2015-05-05 12:44:44.655698 UTC
-request 4 2015-05-05 12:44:44.656051 UTC
-request 5 2015-05-05 12:44:44.86019 UTC
+request 1 2015-05-10 08:35:48.533866 UTC
+request 2 2015-05-10 08:35:48.534358 UTC
+request 3 2015-05-10 08:35:48.534693 UTC
+request 4 2015-05-10 08:35:48.534944 UTC
+request 5 2015-05-10 08:35:48.53512 UTC
+request 1 2015-05-10 08:35:48.535557 UTC
+request 2 2015-05-10 08:35:48.535896 UTC
+request 3 2015-05-10 08:35:48.536174 UTC
+request 4 2015-05-10 08:35:48.536442 UTC
+request 5 2015-05-10 08:35:48.73627 UTC
 ```

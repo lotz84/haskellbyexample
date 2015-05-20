@@ -3,17 +3,12 @@ import Control.Concurrent
 import Control.Concurrent.STM
 
 main = do
-    messages <- newQueue
+    messages <- atomically newTQueue
 
-    forkIO $ writeQueue messages "ping"
+    forkIO $ atomically $ writeTQueue messages "ping"
 
-    msg <- readQueue messages
+    msg <- atomically $ readTQueue messages
     putStrLn msg
-
-    where
-    newQueue   = atomically newTQueue
-    readQueue  = atomically . readTQueue
-    writeQueue = (atomically.) . writeTQueue
 ```
 
 ```bash

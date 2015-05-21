@@ -2,17 +2,12 @@
 import Control.Concurrent.STM
 
 main = do
-    messages &lt;- newQueue
+    messages &lt;- atomically newTQueue
 
-    forkIO $ writeQueue messages &quot;ping&quot;
+    forkIO $ atomically $ writeTQueue messages &quot;ping&quot;
 
-    msg &lt;- readQueue messages
+    msg &lt;- atomically $ readTQueue messages
     putStrLn msg
-
-    where
-    newQueue   = atomically newTQueue
-    readQueue  = atomically . readTQueue
-    writeQueue = (atomically.) . writeTQueue
 </code></pre>
 <pre><code class="language-bash">$ runhaskell channels.hs
 ping

@@ -1,15 +1,15 @@
-To work this example, you need install [aeson](https://hackage.haskell.org/package/aeson).
+To work this example, you need install [aeson](https://hackage.haskell.org/package/aeson) and [lens-aeson](https://hackage.haskell.org/package/lens-aeson).
 
 ```bash
-$ cabal install aeson
+$ cabal install aeson lens-aeson
 ```
 
 ```haskell
 {-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
 import GHC.Generics
+import Control.Lens
 import Data.Aeson
-import Data.HashMap.Strict ((!))
-import Data.Vector ((!?))
+import Data.Aeson.Lens
 import qualified Data.Map as Map
 import qualified Data.ByteString.Lazy.Char8 as BS
 
@@ -29,12 +29,11 @@ main = do
     BS.putStrLn $ encode $ Response1 {page = 1, fruits = ["apple", "peach", "pear"]}
 
     let byt = "{\"num\":6.13,\"strs\":[\"a\",\"b\"]}"
-    let dat = decode byt :: Maybe Value
+    let Just dat = decode byt :: Maybe Value
     print dat
-    let num = (\(Just (Object map)) -> map ! "num") dat
+    let Just num = dat ^? key "num"
     print num
-    let strs = (\(Just (Object map)) -> map ! "strs") dat
-    let str1 = (\(Array vec) -> vec !? 0) strs
+    let Just str1 = dat ^? key "strs" . nth 0
     print str1
 
     let str = "{\"page\": 1, \"fruits\": [\"apple\", \"peach\"]}"
@@ -52,9 +51,9 @@ true
 ["apple","peach","pear"]
 {"lettuce":7,"apple":5}
 {"fruits":["apple","peach","pear"],"page":1}
-Just (Object (fromList [("num",Number 6.13),("strs",Array (fromList [String "a",String "b"]))]))
+Object (fromList [("num",Number 6.13),("strs",Array (fromList [String "a",String "b"]))])
 Number 6.13
-Just (String "a")
+String "a"
 Response1 {page = 1, fruits = ["apple","peach"]}
 apple
 ```

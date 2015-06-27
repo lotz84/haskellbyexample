@@ -1,6 +1,6 @@
 To work this example, you need install [optparse-declarative](http://hackage.haskell.org/package/optparse-declarative).
 
-```
+```bash
 $ cabal install optparse-declarative
 ```
 

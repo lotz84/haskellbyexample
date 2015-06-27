@@ -1,66 +1,68 @@
-<!DOCTYPE html><html><head><title>Haskell by Example: Command-Line Flags</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Command-Line Flags</h1><a href="https://gobyexample.com/command-line-flags">original</a><pre><code class="language-haskell">import Data.Maybe
-import System.Environment
-import System.Console.GetOpt
+<!DOCTYPE html><html><head><title>Haskell by Example: Command-Line Flags</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Command-Line Flags</h1><a href="https://gobyexample.com/command-line-flags">original</a><p>To work this example, you need install <a href="http://hackage.haskell.org/package/optparse-declarative">optparse-declarative</a>.</p>
+<pre><code>$ cabal install optparse-declarative
+</code></pre><pre><code class="language-haskell">{-# LANGUAGE DataKinds #-}
+import Options.Declarative
+import Control.Monad.IO.Class (liftIO)
 
-data Opt = Help
-         | Word String
-         | Numb Int
-         | Fork Bool
-         | Svar String
-         deriving (Eq, Show)
+flags :: Flag &quot;&quot; &#39;[&quot;word&quot;] &quot;\&quot;foo\&quot;&quot; &quot;a string&quot;     (Def &quot;foo&quot; String)
+      -&gt; Flag &quot;&quot; &#39;[&quot;numb&quot;] &quot;42&quot;      &quot;an int&quot;       (Def &quot;42&quot; Int)
+      -&gt; Flag &quot;&quot; &#39;[&quot;fork&quot;] &quot;false&quot;   &quot;a bool&quot;       Bool
+      -&gt; Flag &quot;&quot; &#39;[&quot;svar&quot;] &quot;\&quot;bar\&quot;&quot; &quot;a string var&quot; (Def &quot;bar&quot; String)
+      -&gt; Arg &quot;ARGS&quot; [String]
+      -&gt; Cmd &quot;Command-Line Flags&quot; ()
+flags word numb fork svar args = do
+    liftIO . putStrLn $ &quot;word:&quot; ++ get word
+    liftIO . putStrLn $ &quot;numb:&quot; ++ (show . get $ numb)
+    liftIO . putStrLn $ &quot;fork:&quot; ++ (show . get $ fork)
+    liftIO . putStrLn $ &quot;svar:&quot; ++ get svar
+    liftIO . putStrLn $ &quot;tail:&quot; ++ (show . get $ args)
 
-main = do
-    args &lt;- getArgs
-    let options = [ Option [&#39;h&#39;] [&quot;help&quot;] (NoArg Help) &quot;show help&quot;
-                  , Option [] [&quot;word&quot;] (OptArg (maybe (Word &quot;foo&quot;) Word) &quot;foo&quot;) &quot;a string&quot;
-                  , Option [] [&quot;numb&quot;] (OptArg (maybe (Numb 42) (Numb . read)) &quot;42&quot;) &quot;an int&quot;
-                  , Option [] [&quot;fork&quot;] (OptArg (maybe (Fork False) (Fork . read)) &quot;false&quot;) &quot;a bool&quot;
-                  , Option [] [&quot;svar&quot;] (OptArg (maybe (Svar &quot;bar&quot;) Svar) &quot;bar&quot;) &quot;a string var&quot;
-                  ]
-    let (opts, rem, _) = getOpt Permute options args
-    let putOpt opt = case opt of
-                       Help     -&gt; putStrLn $ usageInfo &quot;&quot; options
-                       (Word x) -&gt; putStrLn $ &quot;word: &quot; ++ x
-                       (Numb x) -&gt; putStrLn $ &quot;numb: &quot; ++ show x
-                       (Fork x) -&gt; putStrLn $ &quot;fork: &quot; ++ show x
-                       (Svar x) -&gt; putStrLn $ &quot;svar: &quot; ++ show x
-    if null (filter (==Help) opts)
-        then do
-            mapM_ print opts
-            putStrLn $ &quot;tail: &quot; ++ show rem
-
-        else putStrLn $ usageInfo &quot;&quot; options
+main :: IO ()
+main = run_ flags
 </code></pre>
 <pre><code class="language-bash">$ ghc command-line-flags.hs -o command-line-flags
 
 $ ./command-line-flags --word=opt --numb=7 --fork --svar=flag
-Word &quot;opt&quot;
-Numb 7
-Fork False
-Svar &quot;flag&quot;
-tail: []
+word:opt
+numb:7
+fork:True
+svar:flag
+tail:[]
 
 $ ./command-line-flags --word=opt
-Word &quot;opt&quot;
-tail: []
+word:opt
+numb:42
+fork:False
+svar:bar
+tail:[]
 
 $ ./command-line-flags --word=opt a1 a2 a3
-Word &quot;opt&quot;
-tail: [&quot;a1&quot;,&quot;a2&quot;,&quot;a3&quot;]
+word:opt
+numb:42
+fork:False
+svar:bar
+tail:[&quot;a1&quot;,&quot;a2&quot;,&quot;a3&quot;]
 
 $ ./command-line-flags --word=opt a1 a2 a3 --numb=7
-Word &quot;opt&quot;
-Numb 7
-tail: [&quot;a1&quot;,&quot;a2&quot;,&quot;a3&quot;]
+word:opt
+numb:42
+fork:False
+svar:bar
+tail:[&quot;a1&quot;,&quot;a2&quot;,&quot;a3&quot;,&quot;--numb=7&quot;]
 
-$ ./command-line-flags -h
+$ ./command-line-flags -?
+Usage: command-line-flags [OPTION...] ARGS
+  Command-Line Flags
 
-  -h  --help          show help
-      --word[=foo]    a string
-      --numb[=42]     an int
-      --fork[=false]  a bool
-      --svar[=bar]    a string var
+Options:
+         --word=&quot;foo&quot;   a string
+         --numb=42      an int
+         --fork         a bool
+         --svar=&quot;bar&quot;   a string var
+  -?     --help         display this help and exit
+  -v[n]  --verbose[=n]  set verbosity level
 
 $ ./command-line-flags --wat
-tail: []
+command-line-flags: unrecognized option &#39;--wat&#39;
+Try &#39;command-line-flags --help&#39; for more information.
 </code></pre><a href="../">back to index</a></div></body></html>

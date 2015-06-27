@@ -1,6 +1,7 @@
 <!DOCTYPE html><html><head><title>Haskell by Example: Command-Line Flags</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Command-Line Flags</h1><a href="https://gobyexample.com/command-line-flags">original</a><p>To work this example, you need install <a href="http://hackage.haskell.org/package/optparse-declarative">optparse-declarative</a>.</p>
-<pre><code>$ cabal install optparse-declarative
-</code></pre><pre><code class="language-haskell">{-# LANGUAGE DataKinds #-}
+<pre><code class="language-bash">$ cabal install optparse-declarative
+</code></pre>
+<pre><code class="language-haskell">{-# LANGUAGE DataKinds #-}
 import Options.Declarative
 import Control.Monad.IO.Class (liftIO)
 

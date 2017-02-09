@@ -30,7 +30,7 @@ main = do
     hSeek handle AbsoluteSeek 6
     at3 <- hTell handle
     b3  <- readAtLeast handle 7
-    putStrLn $ show (length b3) ++ " bytes @ " ++ show at2 ++  ": " ++ b3
+    putStrLn $ show (length b3) ++ " bytes @ " ++ show at3 ++  ": " ++ b3
 
     hSeek handle AbsoluteSeek 0
     hSetBuffering handle (BlockBuffering Nothing) -- default

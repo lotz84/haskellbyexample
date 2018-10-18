@@ -18,7 +18,7 @@ main = do
     let loop1 = do
         req <- atomically $ do
             r <- readTQueue requests
-            readTMVar limitter
+            takeTMVar limitter
             return r
         now <- getCurrentTime
         putStrLn $ "request " ++ show req ++ " " ++ show now
@@ -60,14 +60,14 @@ main = do
 
 ```bash
 $ runhaskell rate-limiting.hs
-request 1 2015-05-10 08:35:48.533866 UTC
-request 2 2015-05-10 08:35:48.534358 UTC
-request 3 2015-05-10 08:35:48.534693 UTC
-request 4 2015-05-10 08:35:48.534944 UTC
-request 5 2015-05-10 08:35:48.53512 UTC
-request 1 2015-05-10 08:35:48.535557 UTC
-request 2 2015-05-10 08:35:48.535896 UTC
-request 3 2015-05-10 08:35:48.536174 UTC
-request 4 2015-05-10 08:35:48.536442 UTC
-request 5 2015-05-10 08:35:48.73627 UTC
+request 1 2018-10-18 21:22:30.873766 UTC
+request 2 2018-10-18 21:22:31.074185 UTC
+request 3 2018-10-18 21:22:31.274635 UTC
+request 4 2018-10-18 21:22:31.474943 UTC
+request 5 2018-10-18 21:22:31.675533 UTC
+request 1 2018-10-18 21:22:31.675713 UTC
+request 2 2018-10-18 21:22:31.675839 UTC
+request 3 2018-10-18 21:22:31.675947 UTC
+request 4 2018-10-18 21:22:31.676057 UTC
+request 5 2018-10-18 21:22:31.876147 UTC
 ```

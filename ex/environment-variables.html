@@ -5,8 +5,7 @@ main = do
     putStr &quot;FOO:&quot; &gt;&gt; (putStrLn  =&lt;&lt; getEnv &quot;FOO&quot;)
     putStr &quot;BAR:&quot; &gt;&gt; (print  =&lt;&lt; lookupEnv &quot;BAR&quot;)
     putStrLn &quot;&quot;
-    mapM_ putStrLn =&lt;&lt; map fst `fmap` getEnvironment
-</code></pre>
+    mapM_ putStrLn =&lt;&lt; map fst `fmap` getEnvironment</code></pre>
 <pre><code class="language-bash">$ runhaskell environment-variables.hs
 FOO:1
 BAR:Nothing
@@ -19,5 +18,4 @@ TERM_PROGRAM
 $ BAR=2 runhaskell environment-variables.hs
 FOO:1
 BAR:Just &quot;2&quot;
-...
-</code></pre><a href="../">back to index</a></div></body></html>
+...</code></pre><a href="../">back to index</a></div></body></html>

@@ -12,11 +12,9 @@ main = do
     installHandler keyboardSignal (Catch handler) Nothing
     putStrLn &quot;awaiting signal&quot;
     takeMVar done
-    putStrLn &quot;exiting&quot;
-</code></pre>
+    putStrLn &quot;exiting&quot;</code></pre>
 <pre><code class="language-bash">$ runhaskell signals.hs
 awaiting signal
 ^C
 interrupt
-exiting
-</code></pre><a href="../">back to index</a></div></body></html>
+exiting</code></pre><a href="../">back to index</a></div></body></html>

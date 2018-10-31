@@ -38,11 +38,9 @@ select (x@(Case v f):xs)  = do
     var &lt;- atomically $ tryRead v
     case var of
         Just b  -&gt; f b
-        Nothing -&gt; select (xs ++ [x])
-</code></pre>
+        Nothing -&gt; select (xs ++ [x])</code></pre>
 <pre><code class="language-bash">$ time runhaskell select.hs
 received one
 received two
 
-real    0m2.267s
-</code></pre><a href="../">back to index</a></div></body></html>
+real    0m2.267s</code></pre><a href="../">back to index</a></div></body></html>

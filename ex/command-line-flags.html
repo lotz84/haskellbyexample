@@ -1,6 +1,5 @@
 <!DOCTYPE html><html><head><title>Haskell by Example: Command-Line Flags</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Command-Line Flags</h1><a href="https://gobyexample.com/command-line-flags">original</a><p>To work this example, you need install <a href="http://hackage.haskell.org/package/optparse-declarative">optparse-declarative</a>.</p>
-<pre><code class="language-bash">$ cabal install optparse-declarative
-</code></pre>
+<pre><code class="language-bash">$ cabal install optparse-declarative</code></pre>
 <pre><code class="language-haskell">{-# LANGUAGE DataKinds #-}
 import Options.Declarative
 import Control.Monad.IO.Class (liftIO)
@@ -19,8 +18,7 @@ flags word numb fork svar args = do
     liftIO . putStrLn $ &quot;tail:&quot; ++ (show . get $ args)
 
 main :: IO ()
-main = run_ flags
-</code></pre>
+main = run_ flags</code></pre>
 <pre><code class="language-bash">$ ghc command-line-flags.hs -o command-line-flags
 
 $ ./command-line-flags --word=opt --numb=7 --fork --svar=flag
@@ -65,5 +63,4 @@ Options:
 
 $ ./command-line-flags --wat
 command-line-flags: unrecognized option &#39;--wat&#39;
-Try &#39;command-line-flags --help&#39; for more information.
-</code></pre><a href="../">back to index</a></div></body></html>
+Try &#39;command-line-flags --help&#39; for more information.</code></pre><a href="../">back to index</a></div></body></html>

@@ -19,8 +19,7 @@ main = do
         forkIO $ worker w jobs results lock
 
     forM_ [1..9] $ atomically . writeTQueue jobs
-    forM_ [1..9] $ \_ -&gt; atomically $ readTQueue results
-</code></pre>
+    forM_ [1..9] $ \_ -&gt; atomically $ readTQueue results</code></pre>
 <pre><code class="language-bash">$ runhaskell worker-pools.hs
 worker 1 processing job 1
 worker 2 processing job 2
@@ -30,5 +29,4 @@ worker 3 processing job 5
 worker 1 processing job 6
 worker 3 processing job 7
 worker 1 processing job 8
-worker 2 processing job 9
-</code></pre><a href="../">back to index</a></div></body></html>
+worker 2 processing job 9</code></pre><a href="../">back to index</a></div></body></html>

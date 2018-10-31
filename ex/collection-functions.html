@@ -9,13 +9,11 @@ main = do
     print $ any (isPrefixOf &quot;p&quot;) strs
     print $ all (isPrefixOf &quot;p&quot;) strs
     print $ filter (elem &#39;e&#39;) strs
-    print $ map (map toUpper) strs
-</code></pre>
+    print $ map (map toUpper) strs</code></pre>
 <pre><code class="language-bash">$ runhaskell collection-functions.hs
 Just 2
 False
 True
 False
 [&quot;peach&quot;, &quot;apple&quot;, &quot;pear&quot;]
-[&quot;PEACH&quot;,&quot;APPLE&quot;,&quot;PEAR&quot;,&quot;PLUM&quot;]
-</code></pre><a href="../">back to index</a></div></body></html>
+[&quot;PEACH&quot;,&quot;APPLE&quot;,&quot;PEAR&quot;,&quot;PLUM&quot;]</code></pre><a href="../">back to index</a></div></body></html>

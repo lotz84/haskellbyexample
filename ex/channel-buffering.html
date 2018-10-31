@@ -9,9 +9,7 @@ main = do
         return msg
 
     putStrLn =&lt;&lt; (atomically . readTQueue) messages
-    putStrLn =&lt;&lt; (atomically . readTQueue) messages
-</code></pre>
+    putStrLn =&lt;&lt; (atomically . readTQueue) messages</code></pre>
 <pre><code class="language-bash">$ runhaskell channel-buffering.hs
 buffered
-queue
-</code></pre><a href="../">back to index</a></div></body></html>
+queue</code></pre><a href="../">back to index</a></div></body></html>

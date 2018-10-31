@@ -1,6 +1,5 @@
 <!DOCTYPE html><html><head><title>Haskell by Example: Regular Expressions</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: Regular Expressions</h1><a href="https://gobyexample.com/regular-expressions">original</a><p>To work this example, you need install <a href="https://hackage.haskell.org/package/regex-compat-tdfa">regex-compat-tdfa</a>.</p>
-<pre><code class="language-bash">$ cabal install regex-compat-tdfa
-</code></pre>
+<pre><code class="language-bash">$ cabal install regex-compat-tdfa</code></pre>
 <pre><code class="language-haskell">import Data.Array
 import Text.Regex
 import Text.Regex.Base
@@ -36,8 +35,7 @@ main = do
     print $ take 2 . map (fst . head . elems) $ matchAllText r &quot;peach punch pinch&quot;
 
     -- ReplaceAllString
-    putStrLn $ subRegex r &quot;a peach&quot; &quot;&lt;fruit&gt;&quot;
-</code></pre>
+    putStrLn $ subRegex r &quot;a peach&quot; &quot;&lt;fruit&gt;&quot;</code></pre>
 <pre><code class="language-bash">$ runhaskell regular-expressions.hs
 True
 True
@@ -48,5 +46,4 @@ peach
 [&quot;peach&quot;,&quot;punch&quot;,&quot;pinch&quot;]
 [[(0,5),(1,2)],[(6,5),(7,2)],[(12,5),(13,2)]]
 [&quot;peach&quot;,&quot;punch&quot;]
-a &lt;fruit&gt;
-</code></pre><a href="../">back to index</a></div></body></html>
+a &lt;fruit&gt;</code></pre><a href="../">back to index</a></div></body></html>

@@ -39,10 +39,8 @@ select (x@(Case v f):xs)  = do
     var &lt;- atomically $ tryRead v
     case var of
         Just b  -&gt; f b
-        Nothing -&gt; select (xs ++ [x])
-</code></pre>
+        Nothing -&gt; select (xs ++ [x])</code></pre>
 <pre><code class="language-bash">$ runhaskell non-blocking-channel-operations.hs
 no message received
 sent message hi
-received message hi
-</code></pre><a href="../">back to index</a></div></body></html>
+received message hi</code></pre><a href="../">back to index</a></div></body></html>

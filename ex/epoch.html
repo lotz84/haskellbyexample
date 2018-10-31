@@ -11,12 +11,10 @@ main = do
     print secs
     print millis
     print nanos
-    print (parseTime defaultTimeLocale &quot;%s&quot;   (show secs) ::  Maybe UTCTime)
-</code></pre>
+    print (parseTime defaultTimeLocale &quot;%s&quot;   (show secs) ::  Maybe UTCTime)</code></pre>
 <pre><code class="language-bash">$ runhaskell epoch.hs
 2015-05-05 13:32:26.455623 UTC
 1430832746
 1430832746455
 1430832746455623000
-Just 2015-05-05 13:32:26 UTC
-</code></pre><a href="../">back to index</a></div></body></html>
+Just 2015-05-05 13:32:26 UTC</code></pre><a href="../">back to index</a></div></body></html>

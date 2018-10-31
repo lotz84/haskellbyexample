@@ -24,8 +24,6 @@ instance ReadOnly TQueue where
 class WriteOnly f where
     write&#39; :: f a -&gt; a -&gt;  IO ()
 instance WriteOnly TQueue where
-    write&#39; = (atomically.) . writeTQueue
-</code></pre>
+    write&#39; = (atomically.) . writeTQueue</code></pre>
 <pre><code class="language-bash">$ runhaskell channel-directions.hs
-passed message
-</code></pre><a href="../">back to index</a></div></body></html>
+passed message</code></pre><a href="../">back to index</a></div></body></html>

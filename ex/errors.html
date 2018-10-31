@@ -30,13 +30,11 @@ main = do
         Left (ArgError arg err) -&gt; do
             print arg
             putStrLn err
-        _ -&gt; return ()
-</code></pre>
+        _ -&gt; return ()</code></pre>
 <pre><code class="language-bash">$ runhaskell errors.hs
 f1 worked: 10
 f1 failed: can&#39;t work with 42
 f2 worked: 10
 f2 failed: 42 - can&#39;t work with it
 42
-can&#39;t work with it
-</code></pre><a href="../">back to index</a></div></body></html>
+can&#39;t work with it</code></pre><a href="../">back to index</a></div></body></html>

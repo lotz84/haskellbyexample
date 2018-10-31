@@ -8,9 +8,7 @@ main = do
     let bs = SHA1.hash s
 
     print s
-    putStrLn $ concatMap (flip showHex &quot;&quot;) $ BS.unpack bs
-</code></pre>
+    putStrLn $ concatMap (flip showHex &quot;&quot;) $ BS.unpack bs</code></pre>
 <pre><code class="language-bash">$ runhaskell sha1-hashes.hs
 &quot;sha1 this string&quot;
-cf23df227d99a74fbe169e3eba035e633b65d94
-</code></pre><a href="../">back to index</a></div></body></html>
+cf23df227d99a74fbe169e3eba035e633b65d94</code></pre><a href="../">back to index</a></div></body></html>

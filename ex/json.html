@@ -1,6 +1,5 @@
 <!DOCTYPE html><html><head><title>Haskell by Example: JSON</title><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/prism.css"><script src="../js/prism.js"></script></head><body><div class="example"><h1>Haskell by Example: JSON</h1><a href="https://gobyexample.com/json">original</a><p>To work this example, you need install <a href="https://hackage.haskell.org/package/aeson">aeson</a> and <a href="https://hackage.haskell.org/package/lens-aeson">lens-aeson</a>.</p>
-<pre><code class="language-bash">$ cabal install aeson lens-aeson
-</code></pre>
+<pre><code class="language-bash">$ cabal install aeson lens-aeson</code></pre>
 <pre><code class="language-haskell">{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
 import GHC.Generics
 import Control.Lens
@@ -35,8 +34,7 @@ main = do
     let str = &quot;{\&quot;page\&quot;: 1, \&quot;fruits\&quot;: [\&quot;apple\&quot;, \&quot;peach\&quot;]}&quot;
     let Just res = decode str :: Maybe Response1
     print res
-    putStrLn $ (fruits res) !! 0
-</code></pre>
+    putStrLn $ (fruits res) !! 0</code></pre>
 <pre><code class="language-bash">$ runhaskell json.hs
 true
 1
@@ -49,5 +47,4 @@ Object (fromList [(&quot;num&quot;,Number 6.13),(&quot;strs&quot;,Array (fromLis
 Number 6.13
 String &quot;a&quot;
 Response1 {page = 1, fruits = [&quot;apple&quot;,&quot;peach&quot;]}
-apple
-</code></pre><a href="../">back to index</a></div></body></html>
+apple</code></pre><a href="../">back to index</a></div></body></html>

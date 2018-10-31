@@ -21,8 +21,7 @@ main = do
                 hSetBuffering handle (BlockBuffering Nothing) -- default
                 hPutStr handle &quot;buffered\n&quot;
                 putStrLn &quot;wrote 9 bytes&quot;
-                hFlush handle
-</code></pre>
+                hFlush handle</code></pre>
 <pre><code class="language-bash">$ runhaskell writing-files.hs
 wrote 5 bytes
 wrote 7 bytes
@@ -34,5 +33,4 @@ haskell
 $ cat /tmp/dat2
 some
 writes
-buffered
-</code></pre><a href="../">back to index</a></div></body></html>
+buffered</code></pre><a href="../">back to index</a></div></body></html>

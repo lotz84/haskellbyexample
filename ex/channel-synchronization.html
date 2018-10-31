@@ -14,8 +14,6 @@ main = do
     forkIO $ worker done
 
     atomically $ takeTMVar done
-    return ()
-</code></pre>
+    return ()</code></pre>
 <pre><code class="language-bash">$ runhaskell channel-synchronization.hs
-working...done
-</code></pre><a href="../">back to index</a></div></body></html>
+working...done</code></pre><a href="../">back to index</a></div></body></html>

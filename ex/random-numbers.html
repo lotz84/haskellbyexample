@@ -20,12 +20,10 @@ main = do
     let s3 = mkStdGen 42
     let (i3, s4) = randomR (0, 100 :: Int) s3
     let (i4,  _) = randomR (0, 100 :: Int) s4
-    putStrLn $ show i3 ++ &quot;, &quot; ++ show i4
-</code></pre>
+    putStrLn $ show i3 ++ &quot;, &quot; ++ show i4</code></pre>
 <pre><code class="language-bash">$ runhaskell random-numbers.hs
 51, 15
 0.2895795
 9.823023, 5.912962
 77, 38
-77, 38
-</code></pre><a href="../">back to index</a></div></body></html>
+77, 38</code></pre><a href="../">back to index</a></div></body></html>

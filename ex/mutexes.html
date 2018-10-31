@@ -33,9 +33,7 @@ main = do
     putStrLn $ &quot;ops: &quot; ++ show opsFinal
 
     s &lt;- atomically $ readTVar state
-    putStrLn $ &quot;state: &quot; ++ show s
-</code></pre>
+    putStrLn $ &quot;state: &quot; ++ show s</code></pre>
 <pre><code class="language-bash">$ runhaskell mutexes.hs
 ops: 299042
-state: fromList [(0,50),(1,81),(2,55),(3,87),(4,47)]
-</code></pre><a href="../">back to index</a></div></body></html>
+state: fromList [(0,50),(1,81),(2,55),(3,87),(4,47)]</code></pre><a href="../">back to index</a></div></body></html>

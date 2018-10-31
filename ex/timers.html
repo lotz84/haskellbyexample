@@ -33,9 +33,7 @@ newTimer n = do
             case runState of
                 Start -&gt; putTMVar timer ()
                 Stop  -&gt; return ()
-    return (state, timer)
-</code></pre>
+    return (state, timer)</code></pre>
 <pre><code class="language-bash">$ runhaskell timers.hs
 Timer 1 expired
-Timer 2 stopped
-</code></pre><a href="../">back to index</a></div></body></html>
+Timer 2 stopped</code></pre><a href="../">back to index</a></div></body></html>

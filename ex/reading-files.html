@@ -29,15 +29,14 @@ main = do
     hSeek handle AbsoluteSeek 6
     at3 &lt;- hTell handle
     b3  &lt;- readAtLeast handle 7
-    putStrLn $ show (length b3) ++ &quot; bytes @ &quot; ++ show at2 ++  &quot;: &quot; ++ b3
+    putStrLn $ show (length b3) ++ &quot; bytes @ &quot; ++ show at3 ++  &quot;: &quot; ++ b3
 
     hSeek handle AbsoluteSeek 0
     hSetBuffering handle (BlockBuffering Nothing) -- default
     b3 &lt;- readAtLeast handle 5
     putStrLn $ show (length b3) ++ &quot; bytes: &quot; ++ b3
 
-    hClose handle
-</code></pre>
+    hClose handle</code></pre>
 <pre><code class="language-bash">$ echo &quot;hello&quot; &gt; /tmp/dat
 $ echo &quot;haskell&quot; &gt;&gt;   /tmp/dat
 $ runhaskell reading-files.hs
@@ -47,5 +46,4 @@ haskell
 5 bytes: hello
 7 bytes @ 6: haskell
 7 bytes @ 6: haskell
-5 bytes: hello
-</code></pre><a href="../">back to index</a></div></body></html>
+5 bytes: hello</code></pre><a href="../">back to index</a></div></body></html>

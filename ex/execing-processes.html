@@ -5,11 +5,9 @@ main = do
     path &lt;- findExecutable &quot;ls&quot;
     case path of
         Nothing -&gt; error &quot;ls doesn&#39;t exist&quot;
-        Just _  -&gt; createProcess (proc &quot;ls&quot; [&quot;-a&quot;, &quot;-l&quot;, &quot;-h&quot;])
-</code></pre>
+        Just _  -&gt; createProcess (proc &quot;ls&quot; [&quot;-a&quot;, &quot;-l&quot;, &quot;-h&quot;])</code></pre>
 <pre><code class="language-bash">$ runhaskell execing-processes.hs
 total 8
 drwxr-xr-x   3  staff   102B  5  5 23:00 .
 drwxr-xr-x  63  staff   2.1K  5  5 22:58 ..
--rw-r--r--   1  staff   214B  5  5 23:00 execing-processes.hs
-</code></pre><a href="../">back to index</a></div></body></html>
+-rw-r--r--   1  staff   214B  5  5 23:00 execing-processes.hs</code></pre><a href="../">back to index</a></div></body></html>

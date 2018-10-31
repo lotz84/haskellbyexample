@@ -7,8 +7,6 @@ main = do
     forkIO $ atomically $ writeTQueue messages &quot;ping&quot;
 
     msg &lt;- atomically $ readTQueue messages
-    putStrLn msg
-</code></pre>
+    putStrLn msg</code></pre>
 <pre><code class="language-bash">$ runhaskell channels.hs
-ping
-</code></pre><a href="../">back to index</a></div></body></html>
+ping</code></pre><a href="../">back to index</a></div></body></html>

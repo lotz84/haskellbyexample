@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "harp": "^0.30.0"
+  },
+  "scripts": {
+    "start": "harp server"
+  }
+}

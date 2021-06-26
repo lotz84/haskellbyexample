@@ -14,7 +14,7 @@ main = do
     forkIO $ f "forkIO"
     forkIO $ (\msg -> putStrLn msg) "going"
 
-    getLine
+    threadDelay 1000000
     putStrLn "done"
 ```
 
@@ -23,10 +23,9 @@ $ runhaskell goroutines.hs
 direct:0
 direct:1
 direct:2
+going
 forkIO:0
-forkIOg:o1i
-ngf
-orkIO:2
-<enter>
+forkIO:1
+forkIO:2
 done
 ```
